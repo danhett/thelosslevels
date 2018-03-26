@@ -5,9 +5,20 @@ __lua__
 -- dan hett
 
 function _init()
-	ypos = 160
-	tcurrent = 0
-	tmax = 60 * 5 -- reset timeout to return to the main menu
+	setupgameparts()
+	setuptimeout()
+	setupglitches()
+	setupfader()
+end
+
+function setupgameparts()
+	nextgame = 'games/02-news.p8'
+	line1 = "there are hundreds of messages."
+	line2 = "a bomb exploded. he is missing."
+	success = "this is a success message"
+	failure = "this is a failure message"
+	col1 = 8
+	col2 = 9
 
 	player = {}
 	player.moving = false
@@ -23,19 +34,27 @@ function _init()
 	testpoint = {}
 	testpoint.x = 0
 	testpoint.y = 0
+end
 
+function setuptimeout()
+	tcurrent = 0
+	tmax = 60 * 60 -- reset timeout to return to the main menu
+end
+
+function setupfader()
+	state = "waiting" -- or fadingdown or playing
+	waittime = 0
+	waittotal = 40
+	fadedelay = 0
+
+	ypos = -20
+end
+
+function setupglitches()
 	glit = {}
 	glit.height=128
 	glit.width=128
 	glit.t=0
-
-	setupfader()
-end
-
-function setupfader()
-	state = "fadingup"; -- or fadingdown or playing
-	waittime = 0;
-	waittotal = 40;
 end
 
 function _update()
@@ -43,58 +62,22 @@ function _update()
 end
 
 function _draw()
-	if ypos > 116 then ypos-=2 end
-
 	cls(0)
+	drawgame()
+	checkcollisions()
+	checktimeout()
+	handlefading()
+	glitch()
+end
+
+
+function drawgame()
 	rectfill_p(0,0,128,128,1,0,1) -- background
 	rectfill_p(10,40,30,60,4,0,11) -- green bit
 	rectfill_p(95,40,115,60,4,0,8) -- red bit
-	drawmessage()
-	glitch()
 
 	animateplayer()
-	checkcollisions()
-	drawgame()
 
-	checktimeout()
-
-	handlefading()
-end
-
-function handlefading()
-	if state == "fadingup" then
-		waittime+=1
-		rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
-		rectfill( 127, 127, 0, 3 * waittime, 0 )
-	end
-
-	if waittime == waittotal then
-		if state == "fadingup" then
-			state = "playing"
-			waittime = 0
-		end
-
-		if state == "fadingdown" then
-			load('games/02-news.p8')
-		end
-	end
-
-	if state == "fadingdown" then
-		 waittime+=1
-		 rectfill( 0, 0, 127, 3 * waittime, 0 )
-		 rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
-	end
-
-end
-
-
-function drawmessage()
-	color(7)
-	outline("roses mark the victims.",16,ypos-10,0,7)
-	outline("find his. be still.",16,ypos,0,8)
-end
-
-function drawgame()
 	if player.moving then
 		spr(player.sprite * 2, player.x, player.y, 2, 2, player.flip)
 	end
@@ -186,6 +169,60 @@ function checktimeout()
 	if tcurrent == tmax then
 		load('losslevels.p8')
 	end
+end
+
+function handlefading()
+	if state == "waiting" then
+		if fadedelay < 200 then
+			fadedelay+=1
+		end
+
+		if fadedelay == 200 then
+			state = "fadingup"
+		end
+
+		drawmessage()
+	end
+
+	if state == "fadingup" then
+		waittime+=1
+
+		if waittime < waittotal  then
+			rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
+			rectfill( 127, 127, 0, 3 * waittime, 0 )
+			drawmessage()
+			ypos += 4
+		end
+	end
+
+	if waittime == waittotal then
+		if state == "fadingup" then
+			state = "playing"
+			waittime = 0
+		end
+
+		if state == "fadingdown" then
+			load(nextgame)
+		end
+	end
+
+	if state == "fadingdown" then
+		waittime+=1
+		rectfill( 0, 0, 127, 3 * waittime, 0 )
+		rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
+	end
+
+end
+
+function drawmessage()
+	-- draw shutters
+	rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
+	rectfill( 127, 127, 0, 3 * waittime, 0 )
+
+	-- draw text
+	if(ypos < 50) then ypos+= 2 end
+	outline(line1,0,ypos,0,col1)
+	outline(line2,0,ypos+10,0,col2)
 end
 
 function rectfill_p(x0,y0,x1,y1,p,c0,c1)
