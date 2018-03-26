@@ -20,6 +20,10 @@ function _init()
 	player.flip = false
 	player.idlesprite = 32
 
+	testpoint = {}
+	testpoint.x = 0
+	testpoint.y = 0
+
 	glit = {}
 	glit.height=128
 	glit.width=128
@@ -34,11 +38,14 @@ function _draw()
 	if ypos > 116 then ypos-=2 end
 
 	cls(0)
-	rectfill_p(0,0,128,128,1,0,1)
+	rectfill_p(0,0,128,128,1,0,1) -- background
+	rectfill_p(10,40,30,60,4,0,11) -- green bit
+	rectfill_p(95,40,115,60,4,0,8) -- red bit
 	drawmessage()
 	glitch()
 
 	animateplayer()
+	checkcollisions()
 	drawgame()
 
 	checktimeout()
@@ -73,16 +80,19 @@ function animateplayer()
 
 		resettimeout()
 	end
+end
 
-	if not player.moving then
-		player.step+=1
-
-		if(player.step%3==0) player.idlesprite += 1
-
-	  if player.idlesprite > 37 then
-	   player.idlesprite = 0
-	  end
+function checkcollisions()
+	if dst(player, testpoint) < 10 then
+		loadnextlevel()
 	end
+end
+
+function dst(p0, p1)
+ local dx = p0.x - p1.x
+ local dy = p0.y - p1.y
+
+ return sqrt(dx*dx+dy*dy)
 end
 
 function outline(s,x,y,c1,c2)
@@ -143,7 +153,7 @@ function checktimeout()
 end
 
 function loadnextlevel()
-
+	load('games/02-search.p8')
 end
 
 function rectfill_p(x0,y0,x1,y1,p,c0,c1)
