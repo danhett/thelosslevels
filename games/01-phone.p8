@@ -28,6 +28,14 @@ function _init()
 	glit.height=128
 	glit.width=128
 	glit.t=0
+
+	setupfader()
+end
+
+function setupfader()
+	state = "fadingup"; -- or fadingdown or playing
+	waittime = 0;
+	waittotal = 40;
 end
 
 function _update()
@@ -49,6 +57,34 @@ function _draw()
 	drawgame()
 
 	checktimeout()
+
+	handlefading()
+end
+
+function handlefading()
+	if state == "fadingup" then
+		waittime+=1
+		rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
+		rectfill( 127, 127, 0, 3 * waittime, 0 )
+	end
+
+	if waittime == waittotal then
+		if state == "fadingup" then
+			state = "playing"
+			waittime = 0
+		end
+
+		if state == "fadingdown" then
+			load('games/02-news.p8')
+		end
+	end
+
+	if state == "fadingdown" then
+		 waittime+=1
+		 rectfill( 0, 0, 127, 3 * waittime, 0 )
+		 rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
+	end
+
 end
 
 
@@ -84,7 +120,7 @@ end
 
 function checkcollisions()
 	if dst(player, testpoint) < 10 then
-		loadnextlevel()
+		state = "fadingdown"
 	end
 end
 
@@ -150,10 +186,6 @@ function checktimeout()
 	if tcurrent == tmax then
 		load('losslevels.p8')
 	end
-end
-
-function loadnextlevel()
-	load('games/02-search.p8')
 end
 
 function rectfill_p(x0,y0,x1,y1,p,c0,c1)

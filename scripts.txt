@@ -1,0 +1,1 @@
+export final.bin games/01-phone.p8 games/02-thing.p8 
