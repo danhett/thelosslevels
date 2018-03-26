@@ -12,9 +12,9 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/09-vigil.p8'
-	line1 = "the next day. no sleep."
-	line2 = "dozens of flowers arrive."
+	nextgame = 'games/15-ash.p8'
+	line1 = "back to outward normality, but..."
+	line2 = "everything is different now."
 	success = "this is a success message"
 	failure = "this is a failure message"
 	col1 = 12

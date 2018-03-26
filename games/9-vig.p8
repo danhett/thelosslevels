@@ -12,13 +12,13 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/12-sorry.p8'
-	line1 = "a coffin is surprisingly heavy."
-	line2 = "keeping a steady pace is hard."
+	nextgame = 'games/10-arn.p8'
+	line1 = "thousands gather at a vigil."
+	line2 = "there are songs, tears, noise"
 	success = "this is a success message"
 	failure = "this is a failure message"
-	col1 = 10
-	col2 = 9
+	col1 = 14
+	col2 = 15
 
 	player = {}
 	player.moving = false

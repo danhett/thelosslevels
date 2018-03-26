@@ -12,12 +12,12 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/02-news.p8'
-	line1 = "there are hundreds of messages."
-	line2 = "a bomb exploded. he is missing."
+	nextgame = 'games/12-sry.p8'
+	line1 = "a coffin is surprisingly heavy."
+	line2 = "keeping a steady pace is hard."
 	success = "this is a success message"
 	failure = "this is a failure message"
-	col1 = 8
+	col1 = 10
 	col2 = 9
 
 	player = {}

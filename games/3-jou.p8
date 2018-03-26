@@ -12,13 +12,13 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/03-journalist.p8'
-	line1 = "it's all over the news."
-	line2 = "scour the feeds. find anything."
+	nextgame = 'games/4-pol.p8'
+	line1 = "a knocking at the door..."
+	line2 = "police? parents? go!!"
 	success = "this is a success message"
 	failure = "this is a failure message"
-	col1 = 12
-	col2 = 13
+	col1 = 14
+	col2 = 15
 
 	player = {}
 	player.moving = false

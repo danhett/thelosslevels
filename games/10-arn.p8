@@ -12,7 +12,7 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/11-funeral.p8'
+	nextgame = 'games/11-bury.p8'
 	line1 = "this is where it happened."
 	line2 = "roses mark the dead. find his."
 	success = "this is a success message"
