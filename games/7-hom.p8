@@ -20,20 +20,9 @@ function setupgameparts()
 	col1 = 8
 	col2 = 9
 
-	player = {}
-	player.moving = false
-	player.frame = 0
-	player.framecount = 0
-	player.x = 60
-	player.y = 60
-	player.step = 0
-	player.speed = 1
-	player.flip = false
-	player.idlesprite = 32
-
-	testpoint = {}
-	testpoint.x = 0
-	testpoint.y = 0
+	flashcurrent = 0
+	flashrate = 10
+	flashstate = false
 end
 
 function setuptimeout()
@@ -67,44 +56,17 @@ function _draw()
 	checkcollisions()
 	checktimeout()
 	handlefading()
+	flash()
 	glitch()
 end
 
 
 function drawgame()
 	rectfill_p(0,0,128,128,1,0,1) -- background
-	rectfill_p(10,40,30,60,4,0,11) -- green bit
-	rectfill_p(95,40,115,60,4,0,8) -- red bit
-
-	animateplayer()
-
-	if player.moving then
-		spr(player.sprite * 2, player.x, player.y, 2, 2, player.flip)
-	end
-
-	if not player.moving then
-		spr(32, player.x, player.y, 2, 2, player.flip)
-	end
-end
-
-function animateplayer()
-	if player.moving then
-		player.step+=1
-
-		if(player.step%3==0) player.sprite += 1
-
-	  if player.sprite > 7 then
-	   player.sprite = 0
-	  end
-
-		resettimeout()
-	end
 end
 
 function checkcollisions()
-	if dst(player, testpoint) < 10 then
-		state = "fadingdown"
-	end
+
 end
 
 function dst(p0, p1)
@@ -126,37 +88,7 @@ function outline(s,x,y,c1,c2)
 end
 
 function checkinputs()
-	player.moving = false
 
-	if btn(0) then
-		player.x-=player.speed
-		player.flip = true;
-		--move()
-		player.moving = true
-	end
-
-	if btn(1) then
-		player.x+=player.speed
-		player.flip = false
-		--move()
-		player.moving = true
-	end
-
-	if btn(2) then
-		player.y-=player.speed
-		--move()
-		player.moving = true
-	end
-
-	if btn(3) then
-		player.y+=player.speed
-		--move()
-		player.moving = true
-	end
-
-	if not player.moving then
-    player.sprite = 0
-  end
 end
 
 function resettimeout()
@@ -220,9 +152,15 @@ function drawmessage()
 	rectfill( 127, 127, 0, 3 * waittime, 0 )
 
 	-- draw text
-	if(ypos < 50) then ypos+= 2 end
-	outline(line1,0,ypos,0,col1)
-	outline(line2,0,ypos+10,0,col2)
+	if(ypos < 50) then ypos+= 4 end
+
+	if flashstate then
+		outline(line1,0,ypos,0,col1)
+		outline(line2,0,ypos+10,0,col2)
+	else
+		outline(line1,0,ypos,1,col1)
+		outline(line2,0,ypos+10,1,col2)
+	end
 end
 
 function rectfill_p(x0,y0,x1,y1,p,c0,c1)
@@ -259,6 +197,20 @@ function color_pattern(c0,c1)
  t={0,1,2,3,4,5,6,7,8,9,
  "a","b","c","d","e","f"}
  return "0x"..t[c0+1]..t[c1+1]
+end
+
+function flash()
+	flashcurrent+=1
+
+	if flashcurrent > flashrate then
+		flashstate = true
+	else
+		flashstate = false
+	end
+
+	if flashcurrent == flashrate * 2 then
+		flashcurrent = 0
+	end
 end
 
 function glitch()
