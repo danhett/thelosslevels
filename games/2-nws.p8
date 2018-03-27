@@ -118,6 +118,12 @@ function drawgame()
 		print(losecount, 30, 10, 11)
 	end
 
+	if not showingmessage then
+		print("tap!", 20 + rnd(2), 24, 7)
+		print("tap!", 60 + rnd(2), 30, 7)
+		print("tap!", 90 + rnd(2), 26, 7)
+	end
+
 	-- base
 	rectfill_p(0,50,128,80,4,col1,col2)
 

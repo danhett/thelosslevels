@@ -21,8 +21,8 @@ function setupgameparts()
 	col2 = 9
 
 	hand = {}
-	hand.x = 10
-	hand.y = 10
+	hand.x = 6
+	hand.y = 30
 	hand.speed = 3
 	hand.frame = 0
 
@@ -77,6 +77,10 @@ function drawgame()
 	rectfill_p(0,0,128,128,1,0,5)
 
 	if(xpos > 0) xpos-=4
+
+	if not showingmessage then
+		print("press!", 10 + rnd(2), 10, 7)
+	end
 
 	-- phone
 	palt(0,false)
