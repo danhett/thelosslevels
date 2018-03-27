@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 15
+version 16
 __lua__
 -- the loss levels
 -- dan hett
@@ -12,28 +12,27 @@ function _init()
 end
 
 function setupgameparts()
+	debugmode = false
 	nextgame = 'games/3-jou.p8'
 	line1 = "it's all over the news."
 	line2 = "scour the feeds. find anything."
-	success = "this is a success message"
-	failure = "this is a failure message"
+	success = "it's still unfolding\n\ni know what to do."
+	failure = "i don't know enough...\n\nstarting to panic."
 	col1 = 12
 	col2 = 13
 
-	player = {}
-	player.moving = false
-	player.frame = 0
-	player.framecount = 0
-	player.x = 60
-	player.y = 60
-	player.step = 0
-	player.speed = 1
-	player.flip = false
-	player.idlesprite = 32
+	flashcurrent = 0
+	flashrate = 10
+	flashstate = false
 
-	testpoint = {}
-	testpoint.x = 0
-	testpoint.y = 0
+	messagetimer = 0
+	messagelimit = 100
+
+	taps = 0
+	tapsneeded = 100
+
+	losecount = 0
+	losemark = 600
 end
 
 function setuptimeout()
@@ -60,59 +59,29 @@ end
 
 function _update()
 	checkinputs()
+
+	adjusttaps()
 end
 
 function _draw()
 	cls(0)
 	drawgame()
-	checkcollisions()
 	checktimeout()
 	handlefading()
+	handlewinloss()
+	flash()
 	glitch()
 end
 
 
 function drawgame()
 	rectfill_p(0,0,128,128,1,0,1) -- background
-	rectfill_p(10,40,30,60,4,0,11) -- green bit
-	rectfill_p(95,40,115,60,4,0,8) -- red bit
 
-	animateplayer()
-
-	if player.moving then
-		spr(player.sprite * 2, player.x, player.y, 2, 2, player.flip)
+	-- debug
+	if debugmode then
+		print(taps, 10, 10, 11)
+		print(losecount, 30, 10, 11)
 	end
-
-	if not player.moving then
-		spr(32, player.x, player.y, 2, 2, player.flip)
-	end
-end
-
-function animateplayer()
-	if player.moving then
-		player.step+=1
-
-		if(player.step%3==0) player.sprite += 1
-
-	  if player.sprite > 7 then
-	   player.sprite = 0
-	  end
-
-		resettimeout()
-	end
-end
-
-function checkcollisions()
-	if dst(player, testpoint) < 10 then
-		state = "fadingdown"
-	end
-end
-
-function dst(p0, p1)
- local dx = p0.x - p1.x
- local dy = p0.y - p1.y
-
- return sqrt(dx*dx+dy*dy)
 end
 
 function outline(s,x,y,c1,c2)
@@ -127,37 +96,26 @@ function outline(s,x,y,c1,c2)
 end
 
 function checkinputs()
-	player.moving = false
+	if (btnp(4)) then
+		dotap()
+	elseif (btnp(5)) then
+		dotap()
+	end
+end
 
-	if btn(0) then
-		player.x-=player.speed
-		player.flip = true;
-		--move()
-		player.moving = true
+function adjusttaps()
+	if losecount < losemark then
+		losecount+=1
 	end
 
-	if btn(1) then
-		player.x+=player.speed
-		player.flip = false
-		--move()
-		player.moving = true
-	end
+	if(losecount == losemark) state="failure"
+end
 
-	if btn(2) then
-		player.y-=player.speed
-		--move()
-		player.moving = true
-	end
+function dotap()
+	taps+=1
 
-	if btn(3) then
-		player.y+=player.speed
-		--move()
-		player.moving = true
-	end
-
-	if not player.moving then
-    player.sprite = 0
-  end
+	if(taps == tapsneeded) state="success"
+	if(taps == 0) state="failure"
 end
 
 function resettimeout()
@@ -212,7 +170,23 @@ function handlefading()
 		rectfill( 0, 0, 127, 3 * waittime, 0 )
 		rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
 	end
+end
 
+function handlewinloss()
+	if state == "success" then
+		outline(success,4,6,3,11)
+		showingmessage = true
+	end
+
+	if state == "fail" then
+		outline(failure,4,6,8,2)
+		showingmessage = true
+	end
+
+	if showingmessage then
+		messagetimer+=1
+		if(messagetimer == messagelimit) state = "fadingdown"
+	end
 end
 
 function drawmessage()
@@ -221,9 +195,15 @@ function drawmessage()
 	rectfill( 127, 127, 0, 3 * waittime, 0 )
 
 	-- draw text
-	if(ypos < 50) then ypos+= 2 end
-	outline(line1,0,ypos,0,col1)
-	outline(line2,0,ypos+10,0,col2)
+	if(ypos < 50) then ypos+= 4 end
+
+	if flashstate then
+		outline(line1,0,ypos,0,col1)
+		outline(line2,0,ypos+10,0,col2)
+	else
+		outline(line1,0,ypos,1,col1)
+		outline(line2,0,ypos+10,1,col2)
+	end
 end
 
 function rectfill_p(x0,y0,x1,y1,p,c0,c1)
@@ -260,6 +240,20 @@ function color_pattern(c0,c1)
  t={0,1,2,3,4,5,6,7,8,9,
  "a","b","c","d","e","f"}
  return "0x"..t[c0+1]..t[c1+1]
+end
+
+function flash()
+	flashcurrent+=1
+
+	if flashcurrent > flashrate then
+		flashstate = true
+	else
+		flashstate = false
+	end
+
+	if flashcurrent == flashrate * 2 then
+		flashcurrent = 0
+	end
 end
 
 function glitch()
