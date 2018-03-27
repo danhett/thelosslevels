@@ -46,6 +46,7 @@ function setupfader()
 	waittime = 0
 	waittotal = 40
 	fadedelay = 0
+	fadelimit = 150
 
 	ypos = -20
 end
@@ -173,11 +174,11 @@ end
 
 function handlefading()
 	if state == "waiting" then
-		if fadedelay < 200 then
+		if fadedelay < fadelimit then
 			fadedelay+=1
 		end
 
-		if fadedelay == 200 then
+		if fadedelay == fadelimit then
 			state = "fadingup"
 		end
 
