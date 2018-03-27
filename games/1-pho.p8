@@ -15,8 +15,8 @@ function setupgameparts()
 	nextgame = 'games/2-nws.p8'
 	line1 = "there are hundreds of messages."
 	line2 = "a bomb exploded. he is missing."
-	success = "could be anything...\nsure it's nothing."
-	failure = "nobody responding...\nwhat's happened?"
+	success = "could be anything...\n\nsure it's nothing."
+	failure = "nobody responding...\n\nwhat's happened?"
 	col1 = 8
 	col2 = 9
 
@@ -32,6 +32,8 @@ function setupgameparts()
 
 	messagetimer = 0
 	messagelimit = 100
+
+	xpos = 700
 end
 
 function setuptimeout()
@@ -74,29 +76,31 @@ end
 function drawgame()
 	rectfill_p(0,0,128,128,1,0,5)
 
+	if(xpos > 0) xpos-=4
+
 	-- phone
 	palt(0,false)
 	palt(6,true)
-	rectfill_p(40,30,100,120,10,0,col2)
-	rectfill_p(42,32,98,118,6,0,col1)
+	rectfill_p(xpos+40,14,xpos+110,120,10,0,col2)
+	rectfill_p(xpos+42,16,xpos+108,100,6,0,col1)
 
 	-- dummy buttons
-	rectfill_p(44,40,96,54,3,0,col2)
-	rectfill_p(44,60,96,74,3,0,col2)
-	rectfill_p(44,100,96,114,3,0,col2)
+	rectfill_p(xpos+44,20,xpos+106,34,3,0,col2)
+	rectfill_p(xpos+44,40,xpos+106,54,3,0,col2)
+	rectfill_p(xpos+44,80,xpos+106,94,3,0,col2)
 
 	-- live button
 	if flashstate and not showingmessage then
-		rectfill_p(44,80,96,94,14,0,col2)
+		rectfill_p(xpos+44,60,xpos+106,74,14,0,col2)
 	else
-		rectfill_p(44,80,96,94,8,0,col2)
+		rectfill_p(xpos+44,60,xpos+106,74,8,0,col2)
 	end
 
 	-- hand
 	spr(hand.frame, hand.x, hand.y, 3, 4)
 
 	-- debug
-	--print(flashstate, 10, 10, 11)
+	--print(hand.y, 10, 10, 11)
 end
 
 function outline(s,x,y,c1,c2)
@@ -131,8 +135,8 @@ function dotap()
 	resettimeout()
 
 	if not showingmessage then
-		if hand.x > 32 and hand.x < 84
-		and hand.y > 78 and hand.y < 92 then
+		if hand.x > 32 and hand.x < 104
+		and hand.y > 58 and hand.y < 72 then
 			state = "success"
 		else
 			state = "fail"
@@ -196,12 +200,12 @@ end
 
 function handlewinloss()
 	if state == "success" then
-		outline(success,10,10,3,11)
+		outline(success,4,6,3,11)
 		showingmessage = true
 	end
 
 	if state == "fail" then
-		outline(failure,10,10,8,2)
+		outline(failure,4,6,8,2)
 		showingmessage = true
 	end
 
@@ -218,8 +222,14 @@ function drawmessage()
 
 	-- draw text
 	if(ypos < 50) then ypos+= 4 end
-	outline(line1,0,ypos,0,col1)
-	outline(line2,0,ypos+10,0,col2)
+
+	if flashstate then
+		outline(line1,0,ypos,0,col1)
+		outline(line2,0,ypos+10,0,col2)
+	else
+		outline(line1,0,ypos,1,col1)
+		outline(line2,0,ypos+10,1,col2)
+	end
 end
 
 function dst(p0, p1)
