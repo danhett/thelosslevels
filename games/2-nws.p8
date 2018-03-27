@@ -154,7 +154,7 @@ function drawgame()
 	end
 
 	-- character
-	if fastflashstate then
+	if fastflashstate and not showingmessage then
 		sspr(128, 64, 16, 16, randxpos, 48, 50, 50)
 	else
 		sspr(128, 80, 16, 16, randxpos, 48, 50, 50)
