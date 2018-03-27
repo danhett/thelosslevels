@@ -45,6 +45,9 @@ function setupgameparts()
 	flashcurrent = 0
 	flashrate = 10
 	flashstate = false
+
+	losecount = 0
+	losemark = 600
 end
 
 function setuptimeout()
@@ -75,6 +78,8 @@ function _update()
 	else
 		player.moving = false
 	end
+
+	checklossstate()
 end
 
 function _draw()
@@ -149,6 +154,14 @@ function outline(s,x,y,c1,c2)
 	 end
 	end
 	print(s,x+1,y+1,c2)
+end
+
+function checklossstate()
+	if losecount < losemark then
+		losecount+=1
+	end
+
+	if(losecount == losemark and not showingmessage) state="fail"
 end
 
 function checkinputs()
