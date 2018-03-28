@@ -12,12 +12,12 @@ function _init()
 end
 
 function setupgameparts()
-	debugmode = true
+	debugmode = false
 	nextgame = 'games/5-fam.p8'
 	line1 = "bundled into a police car."
 	line2 = "lights and sirens on. go."
-	success = "this is a success message"
-	failure = "this is a failure message"
+	success = "we arrive quickly, police\n\nand reporters everywhere."
+	failure = "barely made it, police\n\nand reporters everywhere."
 	col1 = 3
 	col2 = 11
 
@@ -276,12 +276,12 @@ end
 
 function handlewinloss()
 	if state == "success" then
-		outline(success,4,6,3,11)
+		outline(success,4,6,0,11)
 		showingmessage = true
 	end
 
 	if state == "fail" then
-		outline(failure,4,6,8,2)
+		outline(failure,4,6,0,8)
 		showingmessage = true
 	end
 
