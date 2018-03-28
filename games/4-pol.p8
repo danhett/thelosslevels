@@ -30,6 +30,8 @@ function setupgameparts()
 	car.y = 50
 	car.xspeed = 1
 	car.yspeed = 2
+
+	linepos = 50
 end
 
 function setuptimeout()
@@ -82,6 +84,9 @@ function drawgame()
 	palt(0,false)
 	palt(14,true)
 
+	-- car lines
+	drawlines()
+
 	-- police car
 	if flashstate then
 		spr(0,car.x, car.y, 3, 2)
@@ -93,6 +98,16 @@ function drawgame()
 	if debugmode then
 		print(car.x, 10, 10, 8)
 	end
+end
+
+function drawlines()
+	linepos-=10
+
+	if linepos < -30 then
+		linepos = 180
+	end
+
+	rectfill(linepos, 57, linepos+30, 59, 7)
 end
 
 function checkcollisions()
