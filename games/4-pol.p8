@@ -25,13 +25,34 @@ function setupgameparts()
 	flashrate = 10
 	flashstate = false
 
+	messagetimer = 0
+	messagelimit = 100
+
 	car = {}
 	car.x = 10
 	car.y = 50
 	car.xspeed = 1
 	car.yspeed = 2
 
+	enemy1 = {}
+	enemy1.x = 1030
+	enemy1.y = 30
+	enemy1.speed = 3
+
+	enemy2 = {}
+	enemy2.x = 1200
+	enemy2.y = 60
+	enemy2.speed = 4
+
+	enemy3 = {}
+	enemy3.x = 1290
+	enemy3.y = 70
+	enemy3.speed = 5
+
 	linepos = 50
+
+	wincount = 0
+	wintarget = 600
 end
 
 function setuptimeout()
@@ -46,6 +67,13 @@ function setupfader()
 	fadedelay = 0
 	fadelimit = 150
 
+	messagetimer = 0
+  messagelimit = 100
+
+  flashcurrent = 0
+  flashrate = 10
+  flashstate = false
+
 	ypos = -20
 end
 
@@ -58,6 +86,7 @@ end
 
 function _update()
 	checkinputs()
+	checksuccess()
 end
 
 function _draw()
@@ -65,6 +94,7 @@ function _draw()
 	drawgame()
 	checkcollisions()
 	checktimeout()
+	handlewinloss()
 	handlefading()
 	flash()
 	glitch()
@@ -94,9 +124,13 @@ function drawgame()
 		spr(3,car.x, car.y, 3, 2)
 	end
 
+	-- enemies
+	--if state == "playing" then drawenemies() end
+	drawenemies()
+
 	-- debug
 	if debugmode then
-		print(car.x, 10, 10, 8)
+		print(wincount, 10, 10, 8)
 	end
 end
 
@@ -110,7 +144,33 @@ function drawlines()
 	rectfill(linepos, 57, linepos+30, 59, 7)
 end
 
+function drawenemies()
+	-- car one
+	enemy1.x-=enemy1.speed
+	if enemy1.x < -200 and state == "playing" then
+		enemy1.x = 180
+	end
+	spr(6, enemy1.x, enemy1.y, 3, 2, true)
+
+	-- car two
+	enemy2.x-=enemy2.speed
+	if enemy2.x < -60 and state == "playing" then
+		enemy2.x = 200
+	end
+	spr(9, enemy2.x, enemy2.y, 3, 2, true)
+
+	-- car three
+	enemy3.x-=enemy3.speed
+	if enemy3.x < -40 and state == "playing" then
+		enemy3.x = 195
+	end
+	spr(12, enemy3.x, enemy3.y, 3, 2, true)
+end
+
 function checkcollisions()
+	if(dst(car, enemy1) < 10 and dst(car, enemy1) > 0) state = "fail"
+	if(dst(car, enemy2) < 10 and dst(car, enemy2) > 0) state = "fail"
+	if(dst(car, enemy3) < 10 and dst(car, enemy3) > 0) state = "fail"
 
 end
 
@@ -135,18 +195,22 @@ end
 function checkinputs()
 	if btn(0) and car.x > 1 then
 		car.x-=car.xspeed
+		resettimeout()
 	end
 
 	if btn(1) and car.x < 40 then
 		car.x+=car.xspeed
+		resettimeout()
 	end
 
 	if btn(2) and car.y > 28 then
 		car.y-=car.yspeed
+		resettimeout()
 	end
 
 	if btn(3) and car.y < 70  then
 		car.y+=car.yspeed
+		resettimeout()
 	end
 end
 
@@ -201,6 +265,29 @@ function handlefading()
 		waittime+=1
 		rectfill( 0, 0, 127, 3 * waittime, 0 )
 		rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
+	end
+end
+
+function checksuccess()
+	if(wincount < wintarget) wincount+=1
+
+	if(wincount == wintarget) state = "success"
+end
+
+function handlewinloss()
+	if state == "success" then
+		outline(success,4,6,3,11)
+		showingmessage = true
+	end
+
+	if state == "fail" then
+		outline(failure,4,6,8,2)
+		showingmessage = true
+	end
+
+	if showingmessage then
+		messagetimer+=1
+		if(messagetimer >= messagelimit) state = "fadingdown"
 	end
 end
 
@@ -305,22 +392,22 @@ function glitch()
  memcpy(o1,o2,len)
 end
 __gfx__
-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-eeeeeeeee0eeeeeeeeeeeeeeeeeeeeeee0eeeeeeeeeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-eeeee0000800eeeeeeeeeeeeeeeee0000100eeeeeeeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-eeeee07668610eeeeeeeeeeeeeeee07661610eeeeeeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-ee00027261611000000eeeeeee00027268611000000eeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-e0111c76616c11111110eeeee0111c76686c11111110eeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-e01152777c70c1221220eeeee01152777c70c1221220eeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-e0111061611611111110eeeee0111061611611111110eeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-e0222611611162222220eeeee0222611611162222220eeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-e0000666666660000080eeeee0000666666660000080eeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-ee101116660660111000eeeeee101116660660111000eeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-ee00060000000006000eeeeeee00060000000006000eeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-eeee000eeeeeee000eeeeeeeeeee000eeeeeee000eeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000000000000000000000000000000000000000000000000000000000000000000000000000
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000
+eeeeeeeee0eeeeeeeeeeeeeeeeeeeeeee0eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000
+eeeee0000800eeeeeeeeeeeeeeeee0000100eeeeeeeeeeeeeeeee0000100eeeeeeeeeeeeeeeee0000100eeeeeeeeeeeeeeeee0000100eeeeeeeeeeee00000000
+eeeee07668610eeeeeeeeeeeeeeee07661610eeeeeeeeeeeeeeee08888820eeeeeeeeeeeeeeee0bbbbb30eeeeeeeeeeeeeeee0ccccc10eeeeeeeeeee00000000
+ee00027261611000000eeeeeee00027268611000000eeeeeee00027888288000000eeeeeee00027bbb3bb000000eeeeeee00027ccc1cc000000eeeee00000000
+e0111c76616c11111110eeeee0111c76686c11111110eeeee0888c78882c88888880eeeee0bbbc7bbb3cbbbbbbb0eeeee0cccc7ccc1cccccccc0eeee00000000
+e01152777c70c1221220eeeee01152777c70c1221220eeeee08852777c78c8228220eeeee0bb52777c78cb33b330eeeee0cc52777c78cc11c110eeee00000000
+e0111061611611111110eeeee0111061611611111110eeeee0288068888688888880eeeee02bb06b33333333bbb0eeeee02cc06c11111111ccc0eeee00000000
+e0222611611162222220eeeee0222611611162222220eeeee0888818888888882220eeeee0bbbb1bbbbbbbbb3330eeeee0cccc1ccccccccc1110eeee00000000
+e0000666666660000080eeeee0000666666660000080eeeee0000288888880000080eeeee00003bbbbbbb0000080eeeee00001ccccccc0000080eeee00000000
+ee101116660660111000eeeeee101116660660111000eeeeee102222880880111000eeeeee103333bb0bb0111000eeeeee101111cc0cc0111000eeee00000000
+ee00060000000006000eeeeeee00060000000006000eeeeeee00060000000006000eeeeeee00060000000006000eeeeeee00060000000006000eeeee00000000
+eeee000eeeeeee000eeeeeeeeeee000eeeeeee000eeeeeeeeeee000eeeeeee000eeeeeeeeeee000eeeeeee000eeeeeeeeeee000eeeeeee000eeeeeee00000000
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000
 __map__
 1010101010101010101010101010101011111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 1010101010101010101010101010101011111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
