@@ -35,7 +35,7 @@ function setupgameparts()
 	car.yspeed = 2
 
 	enemy1 = {}
-	enemy1.x = 1030
+	enemy1.x = 1130
 	enemy1.y = 30
 	enemy1.speed = 3
 
@@ -168,9 +168,9 @@ function drawenemies()
 end
 
 function checkcollisions()
-	if(dst(car, enemy1) < 10 and dst(car, enemy1) > 0) state = "fail"
-	if(dst(car, enemy2) < 10 and dst(car, enemy2) > 0) state = "fail"
-	if(dst(car, enemy3) < 10 and dst(car, enemy3) > 0) state = "fail"
+	if(dst(car, enemy1) < 6 and dst(car, enemy1) > 1) state = "fail"
+	if(dst(car, enemy2) < 6 and dst(car, enemy2) > 1) state = "fail"
+	if(dst(car, enemy3) < 6 and dst(car, enemy3) > 1) state = "fail"
 
 end
 
