@@ -13,12 +13,12 @@ function _init()
 end
 
 function setupgameparts()
-	debug = true
+	debug = false
 	nextgame = 'games/8-flo.p8'
 	line1 = "home. numb."
 	line2 = "pour a drink. she cries."
-	success = "this is a success message"
-	failure = "this is a failure message"
+	success = "what else do\n\ni do right now?"
+	failure = "fuck it.\n\nthis won't help."
 	col1 = 8
 	col2 = 9
 
@@ -28,12 +28,12 @@ function setupgameparts()
 	dirup = true;
 
 	bottle = {}
-	bottle.x = 30
-	bottle.y = 30
+	bottle.x = -20
+	bottle.y = 40
 	bottle.speed = 2
 
 	glass = {}
-	glass.x = 80
+	glass.x = 100
 	glass.y = 90
 	glass.sprite = 128
 
@@ -41,14 +41,14 @@ function setupgameparts()
 	flashrate = 10
 	flashstate = false
 
+	messagetimer = 0
+	messagelimit = 100
+
 	frame = 0
 	particles = {}
 	gravity = 0.4
 
 	winefilled = 0
-	wineneeded = 400
-	winespritecount = 1
-	maxwinesprites = 8
 end
 
 function setupparticles()
@@ -78,6 +78,7 @@ function setupfader()
 	waittime = 0
 	waittotal = 40
 	fadedelay = 0
+	fadelimit = 150
 
 	ypos = -20
 end
@@ -90,20 +91,25 @@ function setupglitches()
 end
 
 function _update()
-	checkinputs()
+	if state == "playing" then
+		checkinputs()
+	end
 
 	frame += 1
+
+	if (frame == 500) state = "fail"
+
  	particles_update(frame)
 
-	if (winefilled == 10) glass.sprite = 130
-	if (winefilled == 20) glass.sprite = 132
-	if (winefilled == 30) glass.sprite = 134
-	if (winefilled == 40) glass.sprite = 136
-	if (winefilled == 50) glass.sprite = 138
-	if (winefilled == 60) glass.sprite = 140
-	if (winefilled == 70) glass.sprite = 142
+	if (winefilled > 10) glass.sprite = 130
+	if (winefilled > 20) glass.sprite = 132
+	if (winefilled > 30) glass.sprite = 134
+	if (winefilled > 40) glass.sprite = 136
+	if (winefilled > 50) glass.sprite = 138
+	if (winefilled > 60) glass.sprite = 140
+	if (winefilled > 70) glass.sprite = 142
 
-	if (winefilled == 80) state = "success"
+	if (winefilled > 80) state = "success"
 end
 
 function _draw()
@@ -112,6 +118,7 @@ function _draw()
 	drawgame()
 	checkcollisions()
 	checktimeout()
+	handlewinloss()
 	handlefading()
 	flash()
 	glitch()
@@ -121,7 +128,7 @@ end
 function drawbase()
 	f+=1
 
-	if f == 10 then
+	if f == 2 then
 		if dirup then
 			b+=1
 		end
@@ -159,7 +166,7 @@ function drawgame()
 
 	-- debug
 	if debug then
-		print(winespritecount, 10, 10, 1)
+		print(winefilled, 10, 10, 1)
 	end
 end
 
@@ -182,7 +189,7 @@ function particles_update(frame)
 			particle.y += particle.vel_y
 			particle.color = 7
 
-			if(dst(particle, glass) > 0 and dst(particle, glass) < 3) winefilled+= 1
+			if(dst(particle, glass) > 0 and dst(particle, glass) <= 4) winefilled+= 1
 		else
 			particles[i] = particle_new(bottle.x + 60, bottle.y + 12, rnd(50), -10, 1+rnd(1))
 		end
@@ -232,11 +239,11 @@ end
 
 function handlefading()
 	if state == "waiting" then
-		if fadedelay < 200 then
+		if fadedelay < fadelimit then
 			fadedelay+=1
 		end
 
-		if fadedelay == 200 then
+		if fadedelay == fadelimit then
 			state = "fadingup"
 		end
 
@@ -270,7 +277,23 @@ function handlefading()
 		rectfill( 0, 0, 127, 3 * waittime, 0 )
 		rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
 	end
+end
 
+function handlewinloss()
+	if state == "success" then
+		outline(success,4,6,0,11)
+		showingmessage = true
+	end
+
+	if state == "fail" then
+		outline(failure,4,6,0,8)
+		showingmessage = true
+	end
+
+	if showingmessage then
+		messagetimer+=1
+		if(messagetimer >= messagelimit) state = "fadingdown"
+	end
 end
 
 function drawmessage()
