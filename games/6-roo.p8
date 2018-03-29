@@ -15,8 +15,8 @@ function setupgameparts()
 	nextgame = 'games/7-hom.p8'
 	line1 = "led to a room. an officer waits."
 	line2 = "take a seat. this is inevitable."
-	success = "this is a success message"
-	failure = "this is a failure message"
+	success = "sit down. they found him.\n\nhe didn't make it."
+	failure = "stay standing. they found him.\n\nhe didn't make it."
 	col1 = 13
 	col2 = 12
 
@@ -24,12 +24,16 @@ function setupgameparts()
 	player.moving = false
 	player.frame = 0
 	player.framecount = 0
-	player.x = 10
+	player.x = 5
 	player.y = 56
 	player.step = 0
-	player.speed = 1
+	player.speed = 0.5
 	player.flip = false
 	player.idlesprite = 32
+
+	chair = {}
+	chair.x = 100
+	chair.y = 52
 
 	flashcurrent = 0
 	flashrate = 10
@@ -47,7 +51,7 @@ function setupgameparts()
 	flashstate = false
 
 	losecount = 0
-	losemark = 600
+	losemark = 700
 end
 
 function setuptimeout()
@@ -95,14 +99,14 @@ end
 
 
 function drawgame()
-
-	a = flr((player.x/127) * 16)
-
-	-- background
-	rectfill_p(0,0,128,128,a,0,2)
+	if state == "playing" then
+		-- background
+		a = flr((player.x/127) * 16)
+		rectfill_p(0,0,128,128,a,0,8)
+	end
 
 	-- chair
-	spr(64, 100, 52, 2, 3)
+	spr(64, chair.x, chair.y, 2, 3)
 
 	-- player
 	animateplayer()
@@ -132,7 +136,7 @@ function animateplayer()
 end
 
 function checkcollisions()
-	if dst(player, door) < 15 then
+	if dst(player, chair) < 15 then
 		state = "success"
 	end
 end
@@ -218,29 +222,24 @@ function handlefading()
 		drawmessage()
 	end
 
-	if state == "fadingup" then
+	if waittime < waittotal and state == "fadingup" then
 		waittime+=1
 
-		if waittime < waittotal  then
-			rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
-			rectfill( 127, 127, 0, 3 * waittime, 0 )
-			drawmessage()
-			ypos += 4
-		end
-	end
+		rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
+		rectfill( 127, 127, 0, 3 * waittime, 0 )
+		drawmessage()
+		ypos += 4
 
-	if waittime == waittotal then
-		if state == "fadingup" then
-			state = "playing"
-			waittime = 0
-		end
+	elseif waittime == waittotal and state == "fadingup" then
+		state = "playing"
+		waittime = 0
 
+	elseif waittime == waittotal and state == "playing" then
 		if state == "fadingdown" then
 			load(nextgame)
 		end
-	end
 
-	if state == "fadingdown" then
+	elseif state == "fadingdown" then
 		waittime+=1
 		rectfill( 0, 0, 127, 3 * waittime, 0 )
 		rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
@@ -249,7 +248,7 @@ end
 
 function handlewinloss()
 	if state == "success" then
-		outline(success,4,6,3,11)
+		outline(success,20,30,3,11)
 		showingmessage = true
 	end
 
