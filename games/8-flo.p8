@@ -13,7 +13,7 @@ end
 
 function setupgameparts()
 	debug = true
-	nextgame = 'games/9-vig.p8'
+	nextgame = 'games/9-arn.p8'
 	line1 = "the next day. no sleep."
 	line2 = "dozens of flowers arrive."
 	success = "overwhelmed\n\nwith kindness."

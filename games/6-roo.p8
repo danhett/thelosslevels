@@ -222,29 +222,35 @@ function handlefading()
 		drawmessage()
 	end
 
-	if waittime < waittotal and state == "fadingup" then
+	if state == "fadingup" then
 		waittime+=1
 
-		rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
-		rectfill( 127, 127, 0, 3 * waittime, 0 )
-		drawmessage()
-		ypos += 4
+		if waittime < waittotal  then
+			rectfill( 0, 0, 127, 127 - (3 * waittime), 0 )
+			rectfill( 127, 127, 0, 3 * waittime, 0 )
+			drawmessage()
+			ypos += 4
+		end
+	end
 
-	elseif waittime == waittotal and state == "fadingup" then
-		state = "playing"
-		waittime = 0
+	if waittime == waittotal then
+		if state == "fadingup" then
+			state = "playing"
+			waittime = 0
+		end
 
-	elseif waittime == waittotal and state == "playing" then
 		if state == "fadingdown" then
 			load(nextgame)
 		end
+	end
 
-	elseif state == "fadingdown" then
+	if state == "fadingdown" then
 		waittime+=1
 		rectfill( 0, 0, 127, 3 * waittime, 0 )
 		rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
 	end
 end
+
 
 function handlewinloss()
 	if state == "success" then

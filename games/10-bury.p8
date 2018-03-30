@@ -12,13 +12,13 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/11-bury.p8'
-	line1 = "this is where it happened."
-	line2 = "roses mark the dead. find his."
+	nextgame = 'games/11-sry.p8'
+	line1 = "a coffin is surprisingly heavy."
+	line2 = "keeping a steady pace is hard."
 	success = "this is a success message"
 	failure = "this is a failure message"
-	col1 = 3
-	col2 = 11
+	col1 = 10
+	col2 = 9
 
 	flashcurrent = 0
 	flashrate = 10

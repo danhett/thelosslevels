@@ -12,13 +12,13 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/10-arn.p8'
-	line1 = "thousands gather at a vigil."
-	line2 = "there are songs, tears, noise"
+	nextgame = 'games/10-bury.p8'
+	line1 = "this is where it happened."
+	line2 = "roses mark the dead. find his."
 	success = "this is a success message"
 	failure = "this is a failure message"
-	col1 = 14
-	col2 = 15
+	col1 = 3
+	col2 = 11
 
 	flashcurrent = 0
 	flashrate = 10

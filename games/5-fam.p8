@@ -23,6 +23,9 @@ function setupgameparts()
 	flashcurrent = 0
 	flashrate = 10
 	flashstate = false
+
+	losecount = 0
+	losemark = 300
 end
 
 function setuptimeout()
@@ -35,6 +38,10 @@ function setupfader()
 	waittime = 0
 	waittotal = 40
 	fadedelay = 0
+	fadelimit = 150
+
+	messagetimer = 0
+  messagelimit = 100
 
 	ypos = -20
 end
@@ -48,6 +55,12 @@ end
 
 function _update()
 	checkinputs()
+
+	if losecount < losemark then
+		losecount+=1
+	end
+
+	if(losecount == losemark and not showingmessage) state="fail"
 end
 
 function _draw()
@@ -55,6 +68,7 @@ function _draw()
 	drawgame()
 	checkcollisions()
 	checktimeout()
+	handlewinloss()
 	handlefading()
 	flash()
 	glitch()
@@ -105,11 +119,11 @@ end
 
 function handlefading()
 	if state == "waiting" then
-		if fadedelay < 200 then
+		if fadedelay < fadelimit then
 			fadedelay+=1
 		end
 
-		if fadedelay == 200 then
+		if fadedelay == fadelimit then
 			state = "fadingup"
 		end
 
@@ -143,7 +157,23 @@ function handlefading()
 		rectfill( 0, 0, 127, 3 * waittime, 0 )
 		rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
 	end
+end
 
+function handlewinloss()
+	if state == "success" then
+		outline(success,4,6,0,11)
+		showingmessage = true
+	end
+
+	if state == "fail" then
+		outline(failure,4,6,0,8)
+		showingmessage = true
+	end
+
+	if showingmessage then
+		messagetimer+=1
+		if(messagetimer >= messagelimit) state = "fadingdown"
+	end
 end
 
 function drawmessage()
