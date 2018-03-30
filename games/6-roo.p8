@@ -103,6 +103,8 @@ function drawgame()
 		-- background
 		a = flr((player.x/127) * 16)
 		rectfill_p(0,0,128,128,a,0,8)
+
+		rectfill_p(0,55,128,85,1,0,13)
 	end
 
 	-- chair

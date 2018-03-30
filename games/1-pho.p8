@@ -21,7 +21,7 @@ function setupgameparts()
 	col2 = 9
 
 	b = 0;
-	m = 3;
+	m = 15;
 	f = 0;
 	dirup = true;
 
@@ -81,7 +81,7 @@ end
 function drawbase()
 	f+=1
 
-	if f == 14 then
+	if f == 4 then
 		if dirup then
 			b+=1
 		end
@@ -102,16 +102,16 @@ function drawbase()
 	end
 
 	--rectfill_p(0,0,128,128,b,0,5)
-	rectfill_p(0,0,128,128,b,1,12)
+	rectfill_p(0,0,128,128,b,14,12)
 end
 
 
 function drawgame()
 	if(xpos > 0) xpos-=4
 
-	if not showingmessage then
-		print("press!", 10 + rnd(2), 10, 7)
-	end
+	--if not showingmessage then
+		--print("press!", 10 + rnd(2), 10, 7)
+	--end
 
 	-- phone
 	palt(0,false)

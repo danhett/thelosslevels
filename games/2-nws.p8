@@ -22,7 +22,7 @@ function setupgameparts()
 	col2 = 13
 
 	b = 0;
-	m = 3;
+	m = 14;
 	f = 0;
 	dirup = true;
 
@@ -88,7 +88,7 @@ end
 function drawbase()
 	f+=1
 
-	if f == 14 then
+	if f == 3 then
 		if dirup then
 			b+=1
 		end
@@ -108,7 +108,7 @@ function drawbase()
 		if b == 1 then dirup = true end;
 	end
 
-	rectfill_p(0,0,128,128,b,0,5)
+	rectfill_p(0,0,128,128,b,3,2)
 end
 
 function drawgame()

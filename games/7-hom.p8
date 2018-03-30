@@ -162,7 +162,9 @@ function drawgame()
 	spr(64, bottle.x, bottle.y, 8, 4)
 
 	-- wine
-	particles_draw()
+	if not showingmessage then
+		particles_draw()
+	end
 
 	-- debug
 	if debug then
@@ -191,7 +193,9 @@ function particles_update(frame)
 
 			if(dst(particle, glass) > 0 and dst(particle, glass) <= 4) winefilled+= 1
 		else
-			particles[i] = particle_new(bottle.x + 60, bottle.y + 12, rnd(50), -10, 1+rnd(1))
+			if not showingmessage then
+				particles[i] = particle_new(bottle.x + 60, bottle.y + 12, rnd(50), -10, 1+rnd(1))
+			end
 		end
 	end
 end
