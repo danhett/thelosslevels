@@ -20,6 +20,11 @@ function setupgameparts()
 	col1 = 8
 	col2 = 9
 
+	b = 0;
+	m = 3;
+	f = 0;
+	dirup = true;
+
 	hand = {}
 	hand.x = 6
 	hand.y = 30
@@ -64,6 +69,7 @@ end
 
 function _draw()
 	cls(0)
+	drawbase()
 	drawgame()
 	checktimeout()
 	handlefading()
@@ -72,10 +78,35 @@ function _draw()
 	flash()
 end
 
+function drawbase()
+	f+=1
+
+	if f == 14 then
+		if dirup then
+			b+=1
+		end
+
+		if not dirup then
+			b-=1
+		end
+
+		f = 1
+	end
+
+	if dirup then
+		if b == m then dirup = false end;
+	end
+
+	if not dirup then
+		if b == 1 then dirup = true end;
+	end
+
+	--rectfill_p(0,0,128,128,b,0,5)
+	rectfill_p(0,0,128,128,b,1,12)
+end
+
 
 function drawgame()
-	rectfill_p(0,0,128,128,1,0,5)
-
 	if(xpos > 0) xpos-=4
 
 	if not showingmessage then
@@ -85,8 +116,8 @@ function drawgame()
 	-- phone
 	palt(0,false)
 	palt(6,true)
-	rectfill_p(xpos+40,14,xpos+110,120,10,0,col2)
-	rectfill_p(xpos+42,16,xpos+108,100,6,0,col1)
+	rectfill_p(xpos+40,14,xpos+110,120,10,0,5)
+	rectfill_p(xpos+42,16,xpos+108,100,15,0,7)
 
 	-- dummy buttons
 	rectfill_p(xpos+44,20,xpos+106,34,3,0,col2)
@@ -97,7 +128,7 @@ function drawgame()
 	if flashstate and not showingmessage then
 		rectfill_p(xpos+44,60,xpos+106,74,14,0,col2)
 	else
-		rectfill_p(xpos+44,60,xpos+106,74,8,0,col2)
+		rectfill_p(xpos+44,60,xpos+106,74,8,0,11)
 	end
 
 	-- hand
