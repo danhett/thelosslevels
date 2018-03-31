@@ -74,7 +74,7 @@ function setupgameparts()
 	haspressed = false
 
 	losecount = 0
-	losemark = 600
+	losemark = 800
 end
 
 function setuptimeout()
