@@ -13,12 +13,12 @@ end
 
 function setupgameparts()
 	nextgame = 'losslevels.p8'
-	line1 = "ashes laid in the perfect place."
-	line2 = "he never got here."
+	line1 = "back to outward normality, but..."
+	line2 = "everything is different now."
 	success = "this is a success message"
 	failure = "this is a failure message"
-	col1 = 14
-	col2 = 15
+	col1 = 12
+	col2 = 13
 
 	flashcurrent = 0
 	flashrate = 10

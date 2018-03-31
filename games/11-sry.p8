@@ -17,8 +17,8 @@ function setupgameparts()
 	nextgame = 'games/12-flat.p8'
 	line1 = "strangers approach relentlessly."
 	line2 = "sorry for your loss, man."
-	success = "everyone means well...\n\nit's a little much."
-	failure = "everyone means well...\n\nthere's no escaping it."
+	success = "everyone means well...\n\nbut it's too much."
+	failure = "everyone means well...\n\nbut there's no escaping it."
 	col1 = 13
 	col2 = 12
 

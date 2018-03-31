@@ -168,7 +168,7 @@ function fadedownscene()
 		 rectfill( 127, 127, 0, 127 - (3 * waittime), 0 )
 	end
 
-	if(waittime == waittotal) load('games/11-sry.p8')
+	if(waittime == waittotal) load('games/10-bury.p8')
 end
 
 function rectfill_p(x0,y0,x1,y1,p,c0,c1)

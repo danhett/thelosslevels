@@ -12,7 +12,7 @@ function _init()
 end
 
 function setupgameparts()
-	nextgame = 'games/13-back.p8'
+	nextgame = 'games/13-ash.p8'
 	line1 = "his home is empty. sold quickly."
 	line2 = "a life packed into boxes."
 	success = "this is a success message"

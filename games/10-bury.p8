@@ -164,8 +164,6 @@ end
 
 
 function drawgame()
-	rectfill_p(0,0,128,128,1,0,1) -- background
-
 	-- pair1
 	spr(left, pair1.x, pair1.y - slideleft, 2,4)
 	spr(right, pair1.x + 10, pair1.y - slideright, 2,4)
@@ -190,6 +188,15 @@ function drawgame()
 	spr(playerleft, pair6.x, leftcurrent, 2,4)
 	spr(playerright, pair6.x + 10, rightcurrent, 2,4)
 
+	-- coffin layout
+	line(46, 2, 76, 2, 7) -- top
+	line(76, 2, 90, 30, 7) -- top sides
+	line(46, 2, 32, 30, 7)
+	line(32, 30, 44, 120, 7) -- lower sides
+	line(90, 30, 80, 120, 7)
+	line(80, 120, 44, 120, 7) -- bottom
+
+	-- button prompts
 	if not haspressed then
 		if flashstate then
 			spr(0, 79, 116, 2, 2)
