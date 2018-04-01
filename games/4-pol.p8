@@ -13,7 +13,7 @@ end
 
 function setupgameparts()
 	debugmode = false
-	nextgame = 'games/5-fam.p8'
+	nextgame = 'games/6-roo.p8' -- SKIPPING ONE AT THE MOMENT
 	line1 = "bundled into a police car."
 	line2 = "lights and sirens on. go."
 	success = "we arrive quickly, police\n\nand reporters everywhere."
