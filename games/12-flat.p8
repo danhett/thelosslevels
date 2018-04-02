@@ -17,8 +17,8 @@ function setupgameparts()
 	nextgame = 'games/13-ash.p8'
 	line1 = "his home is empty. sold quickly."
 	line2 = "pack a life into boxes."
-	success = "this is a success message"
-	failure = "this is a failure message"
+	success = "everything in its place.\n\nthat place isn't here now."
+	failure = "objects, not memories.\n\nleave it all here."
 	col1 = 8
 	col2 = 9
 
@@ -62,9 +62,50 @@ function setupgameparts()
 	c1OFF = 70
 	c2OFF = 78
 	c3OFF = 68
-	c4OFF = 70
+	c4OFF = 76
 
-	testvar = false
+	done1 = false
+	done2 = false
+	done3 = false
+	done4 = false
+	done5 = false
+	done6 = false
+	done7 = false
+
+	yoffset = 200
+
+	box1 = {}
+	box1.sprite = 128
+	box1.x = 6
+	box1.y = 106 + yoffset
+
+	box2 = {}
+	box2.sprite = 130
+	box2.x = 25
+	box2.y = 102 + yoffset
+
+	box3 = {}
+	box3.sprite = 132
+	box3.x = 42
+	box3.y = 101 + yoffset
+
+	box4 = {}
+	box4.sprite = 160
+	box4.x = 63
+	box4.y = 106 + yoffset
+
+	box5 = {}
+	box5.sprite = 134
+	box5.x = 60
+	box5.y = 90 + yoffset
+
+	box6 = {}
+	box6.sprite = 138
+	box6.x = 95
+	box6.y = 92 + yoffset
+
+	losecount = 0
+	losemark = 600
 end
 
 function setuptimeout()
@@ -91,6 +132,15 @@ end
 
 function _update()
 	checkinputs()
+	checklossstate()
+end
+
+function checklossstate()
+	if losecount < losemark then
+		losecount+=1
+	end
+
+	if(losecount == losemark and not showingmessage) state="fail"
 end
 
 function _draw()
@@ -118,6 +168,14 @@ function drawgame()
 	spr(c6, 92, 2, 2, 4)
 	spr(c7, 110, 2, 2, 4)
 
+	-- boxes
+	spr(box1.sprite, box1.x, box1.y, 2, 2)
+	spr(box2.sprite, box2.x, box2.y, 2, 2)
+	spr(box3.sprite, box3.x, box3.y, 2, 2)
+	spr(box4.sprite, box4.x, box4.y, 4, 2)
+	spr(box5.sprite, box5.x, box5.y, 4, 2)
+	spr(box6.sprite, box6.x, box6.y, 4, 4)
+
 	-- player
 	animateplayer()
 
@@ -131,7 +189,7 @@ function drawgame()
 
 	-- debug
 	if debug then
-		print(testvar, 10, 10, 11)
+		--print(testvar, 10, 10, 11)
 	end
 end
 
@@ -196,11 +254,11 @@ function checkinputs()
 		player.moving = true
 	end
 
-	if btn(4) then
+	if btnp(4) then
 		checkdoors()
 	end
 
-	if btn(5) then
+	if btnp(5) then
 		checkdoors()
 	end
 
@@ -210,16 +268,58 @@ function checkinputs()
 end
 
 function checkdoors()
-	-- 1 2 3 2 2 1 1 4
+	-- 1 2 3 2 2 1 4
 
 	if player.y < 30 then
-		if(player.x >= 0 and player.x < 24) c1 = c1OFF
-		if(player.x >= 16 and player.x < 42) c2 = c2OFF
-		if(player.x >= 34 and player.x < 60) c3 = c3OFF
-		if(player.x >= 52 and player.x < 78) c4 = c2OFF
-		if(player.x >= 74 and player.x < 96) c5 = c2OFF
-		if(player.x >= 88 and player.x < 114) c6 = c1OFF
-		if(player.x >= 106 and player.x < 131) c7 = c4OFF
+		if player.x >= 0 and player.x < 24 and not done1 then
+			c1 = c1OFF
+			done1 = true
+			box1.y -= yoffset
+			checkboxes()
+		end
+		if player.x >= 16 and player.x < 42 and not done2 then
+			c2 = c2OFF
+			done2 = true
+			box2.y -= yoffset
+			checkboxes()
+		end
+		if player.x >= 34 and player.x < 60 and not done3 then
+			c3 = c3OFF
+			done3 = true
+			box3.y -= yoffset
+			checkboxes()
+		end
+		if player.x >= 52 and player.x < 78 and not done4 then
+			c4 = c2OFF
+			done4 = true
+			box4.y -= yoffset
+			checkboxes()
+		end
+		if player.x >= 74 and player.x < 96 and not done5 then
+			c5 = c2OFF
+			done5 = true
+			box5.y -= yoffset
+			checkboxes()
+		end
+		if player.x >= 88 and player.x < 110 and not done6 then
+			c6 = c1OFF
+			done6 = true
+			box6.y -= yoffset
+			checkboxes()
+		end
+		if player.x >= 106 and player.x < 131 and not done7 then
+			c7 = c4OFF
+			done7 = true
+			checkboxes()
+		end
+	end
+end
+
+function checkboxes()
+	-- quicker than faffing around with key repeats, fight me
+	if done1 and done2 and done3 and
+		 done4 and done5 and done6 and done7 then
+		state = 'success'
 	end
 end
 
@@ -280,13 +380,13 @@ end
 function handlewinloss()
 	if state == "success" then
 		player.moving = false
-		outline(success,4,6,0,11)
+		outline(success,4,100,0,11)
 		showingmessage = true
 	end
 
 	if state == "fail" then
 		player.moving = false
-		outline(failure,4,6,0,8)
+		outline(failure,4,100,0,8)
 		showingmessage = true
 	end
 
@@ -461,38 +561,70 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 2e222222e222222e2e222222e222222e2e2222222222220e2e2222222222220e5400000040000004540000004000000454555555555555045455555555555504
 aeeeeeeeeeeeeeeeaeeeeeeeeeeeeeeeaeeeeeeeeeeeeeeeaeeeeeeeeeeeeeeea444444444444444a444444444444444a444444444444444a444444444444444
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-99999999999990009999999999999000999999999999900099999999999999999999999999999000999999999999999999999999999990000000000000000000
-94444454454444009445444454444400944444444444440094444444444544454444444444444400944444444454454445444444444444000000000000000000
-94444454454444009445444454444400944444444444440094444444444544454444444444444400944444444454454445444444444444000000000000000000
-94444454454444009445555554444400944444444444440094444444444544454444444444444400944444444454454445444444444444000000000000000000
-94444455554444009444444444444400944454445555440094444555554555554445544444454400944444444454454445444444444444000000000000000000
-94444444444444009444445555444400944555444554440094445544454444444444444444444400944444444454454445444444444444000000000000000000
-94444444444444009444444444444400945454544444440094444444445444444455444445544400944444444454454445444444444444000000000000000000
-94444444444444009444455555554400944454444555540094444444454444444444444444444400944444444455554445444444444444000000000000000000
-94444444444444009445454444444400944454444444440094444445544444444455555544444400944444444444454554444444444444000000000000000000
-94444444444444009445455555554400944454455555540094444445544444444444444444444400944444444444455544444444444444000000000000000000
-94444555444444009445444444444400944454444444440094444444544444444444444444544400944444444444444444444444444444000000000000000000
-94444545444444009445455555544400944454455455440094444444444444444444444444444400944455544444444444444444444444000000000000000000
-94444545554444009445444444444400944454444444440094444444454444444444444444444400944454544444444444444444444444000000000000000000
-94444545454444009444455555454400944444455555540094444444444444444444444444444400944454544444444444444444444444000000000000000000
-04444545454444000444444444444400044444444444440004444444444444444444444444444400944455544444445555554454555444000000000000000000
-00000000000000000000000000000000000000000000000000000000000000000000000000000000944444444444444444444444444444000000000000000000
-99999999999999999999999999999000000000000000000000000000000000000000000000000000944455544444444455555555544444000000000000000000
-94444444444544544544444444444400000000000000000000000000000000000000000000000000944454544444444444444444444444000000000000000000
-94444444444544544544444444444400000000000000000000000000000000000000000000000000944455544444444444444444555544000000000000000000
-94444444444544544544444444444400000000000000000000000000000000000000000000000000944454444444444444445555544444000000000000000000
-94444444444544544544444444444400000000000000000000000000000000000000000000000000944444444444445555444444444444000000000000000000
-94444444444544544544444444444400000000000000000000000000000000000000000000000000944444444444445445444444444444000000000000000000
-94444444444544555544444444444400000000000000000000000000000000000000000000000000944444444444445445444444444444000000000000000000
-94444444444544544444444444444400000000000000000000000000000000000000000000000000944444444444445445555444444444000000000000000000
-94444444444554544444444444444400000000000000000000000000000000000000000000000000944444444444555445445544444444000000000000000000
-94444444444455544444444444444400000000000000000000000000000000000000000000000000944444444444545445444544444444000000000000000000
-94444444444444444444444444455500000000000000000000000000000000000000000000000000944444444444545445444544444444000000000000000000
-94444444444444444444444445554400000000000000000000000000000000000000000000000000944444444444545445444544444444000000000000000000
-94444444444444444444444445444400000000000000000000000000000000000000000000000000944444444444545445444544444444000000000000000000
-94444444444444444444444444544400000000000000000000000000000000000000000000000000044444444444545445444544444444000000000000000000
-04444444444444444444444444544400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+9999999999999aaa9999999999999aaa9999999999999aaa99999999999999999999999999999aaa99999999999999999999999999999aaaaaaaaaaaaaaaaaaa
+94444454454444aa94454444544444aa94444444444444aa944444444445444544444444444444aa944444444454454445444444444444aaaaaaaaaaaaaaaaaa
+94444454454444aa94454444544444aa94444444444444aa944444444445444544444444444444aa944444444454454445444444444444aaaaaaaaaaaaaaaaaa
+94444454454444aa94455555544444aa94444444444444aa944444444445444544444444444444aa944444444454454445444444444444aaaaaaaaaaaaaaaaaa
+94444455554444aa94444444444444aa94445444555544aa944445555545555544455444444544aa944444444454454445444444444444aaaaaaaaaaaaaaaaaa
+94444444444444aa94444455554444aa94455544455444aa944455444544444444444444444444aa944444444454454445444444444444aaaaaaaaaaaaaaaaaa
+94444444444444aa94444444444444aa94545454444444aa944444444454444444554444455444aa944444444454454445444444444444aaaaaaaaaaaaaaaaaa
+94444444444444aa94444555555544aa94445444455554aa944444444544444444444444444444aa944444444455554445444444444444aaaaaaaaaaaaaaaaaa
+94444444444444aa94454544444444aa94445444444444aa944444455444444444555555444444aa944444444444454554444444444444aaaaaaaaaaaaaaaaaa
+94444444444444aa94454555555544aa94445445555554aa944444455444444444444444444444aa944444444444455544444444444444aaaaaaaaaaaaaaaaaa
+94444555444444aa94454444444444aa94445444444444aa944444445444444444444444445444aa944444444444444444444444444444aaaaaaaaaaaaaaaaaa
+94444545444444aa94454555555444aa94445445545544aa944444444444444444444444444444aa944455544444444444444444444444aaaaaaaaaaaaaaaaaa
+94444545554444aa94454444444444aa94445444444444aa944444444544444444444444444444aa944454544444444444444444444444aaaaaaaaaaaaaaaaaa
+94444545454444aa94444555554544aa94444445555554aa944444444444444444444444444444aa944454544444444444444444444444aaaaaaaaaaaaaaaaaa
+a4444545454444aaa4444444444444aaa4444444444444aaa44444444444444444444444444444aa944455544444445555554454555444aaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444444444444444444444aaaaaaaaaaaaaaaaaa
+99999999999999999999999999999aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944455544444444455555555544444aaaaaaaaaaaaaaaaaa
+944444444445445445444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944454544444444444444444444444aaaaaaaaaaaaaaaaaa
+944444444445445445444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944455544444444444444444555544aaaaaaaaaaaaaaaaaa
+944444444445445445444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944454444444444444445555544444aaaaaaaaaaaaaaaaaa
+944444444445445445444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444445555444444444444aaaaaaaaaaaaaaaaaa
+944444444445445445444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444445445444444444444aaaaaaaaaaaaaaaaaa
+944444444445445555444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444445445444444444444aaaaaaaaaaaaaaaaaa
+944444444445445444444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444445445555444444444aaaaaaaaaaaaaaaaaa
+944444444445545444444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444555445445544444444aaaaaaaaaaaaaaaaaa
+944444444444555444444444444444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444545445444544444444aaaaaaaaaaaaaaaaaa
+944444444444444444444444444555aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444545445444544444444aaaaaaaaaaaaaaaaaa
+944444444444444444444444455544aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444545445444544444444aaaaaaaaaaaaaaaaaa
+944444444444444444444444454444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa944444444444545445444544444444aaaaaaaaaaaaaaaaaa
+944444444444444444444444445444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa44444444444545445444544444444aaaaaaaaaaaaaaaaaa
+a44444444444444444444444445444aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 __map__
 1010101010101010101010101010101011111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 1010101010101010101010101010101011111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
