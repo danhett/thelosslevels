@@ -16,8 +16,8 @@ function setupgameparts()
 	debug = false
 
 	nextgame = 'games/14-back.p8'
-	line1 = "ashes laid in the perfect place."
-	line2 = "he never got here."
+	line1 = "he meant to visit this place..."
+	line2 = "and did, in a way."
 	success = "it's so quiet here."
 	failure = "it's so quiet here."
 	col1 = 14
