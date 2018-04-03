@@ -179,10 +179,17 @@ function drawenemies()
 end
 
 function checkcollisions()
-	if(dst(car, enemy1) < 6 and dst(car, enemy1) > 1) state = "fail"
-	if(dst(car, enemy2) < 6 and dst(car, enemy2) > 1) state = "fail"
-	if(dst(car, enemy3) < 6 and dst(car, enemy3) > 1) state = "fail"
+	if enemy1.x < 50 then
+		if(dst(car, enemy1) < 10 and dst(car, enemy1) > 1) state = "fail"
+	end
 
+	if enemy2.x < 50 then
+		if(dst(car, enemy2) < 10 and dst(car, enemy2) > 1) state = "fail"
+	end
+
+	if enemy3.x < 50 then
+		if(dst(car, enemy3) < 10 and dst(car, enemy3) > 1) state = "fail"
+	end
 end
 
 function dst(p0, p1)

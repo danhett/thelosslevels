@@ -195,25 +195,25 @@ function animateplayer()
 end
 
 function checkcollisions()
-	if dst(player, flower1) > 0 and dst(player, flower1) < 6 and flower1.speed > 0 then
+	if dst(player, flower1) > 0 and dst(player, flower1) < 6 and flower1.y > 60 then
 		flower1.y = -1000
 		flower1.speed = 0
 		grad+=2
 	end
 
-	if dst(player, flower2) > 0 and dst(player, flower2) < 6 and flower2.speed > 0 then
+	if dst(player, flower2) > 0 and dst(player, flower2) < 6 and flower2.y > 60 then
 		flower2.y = -1000
 		flower2.speed = 0
 		grad+=2
 	end
 
-	if dst(player, flower3) > 0 and dst(player, flower3) < 6 and flower3.speed > 0 then
+	if dst(player, flower3) > 0 and dst(player, flower3) < 6 and flower3.y > 60 then
 		flower3.y = -1000
 		flower3.speed = 0
 		grad+=2
 	end
 
-	if dst(player, flower4) > 0 and dst(player, flower4) < 6 and flower4.speed > 0 then
+	if dst(player, flower4) > 0 and dst(player, flower4) < 6 and flower4.y > 60 then
 		flower4.y = -1000
 		flower4.speed = 0
 		grad+=2
@@ -340,7 +340,7 @@ end
 
 function handlewinloss()
 	if state == "success" then
-		outline(success,4,6,3,11)
+		outline(success,34,70,3,11)
 		showingmessage = true
 
 		if playedendsound == false then
@@ -350,7 +350,7 @@ function handlewinloss()
 	end
 
 	if state == "fail" then
-		outline(failure,4,6,8,2)
+		outline(failure,34,70,8,2)
 		showingmessage = true
 
 		if playedendsound == false then

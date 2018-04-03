@@ -32,6 +32,7 @@ function setupgameparts()
 	player.speed = 2
 	player.flip = false
 	player.idlesprite = 32
+	player.sprite = 0
 
 	flashcurrent = 0
 	flashrate = 10
@@ -77,7 +78,7 @@ function setupglitches()
 end
 
 function _update()
-	if not showingmessage then
+	if state == "playing" then
 		checkinputs()
 	else
 		player.moving = false

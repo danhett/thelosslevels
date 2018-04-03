@@ -289,7 +289,7 @@ end
 
 function handlewinloss()
 	if state == "success" then
-		outline(success,4,6,3,11)
+		outline(success,4,6,0,11)
 		showingmessage = true
 
 		if playedendsound == false then
@@ -299,7 +299,7 @@ function handlewinloss()
 	end
 
 	if state == "fail" then
-		outline(failure,4,6,8,2)
+		outline(failure,4,6,0,8)
 		showingmessage = true
 
 		if playedendsound == false then
