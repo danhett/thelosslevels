@@ -96,6 +96,7 @@ function _update()
 	end
 
 	checklossstate()
+
 end
 
 function checklossstate()
@@ -103,7 +104,9 @@ function checklossstate()
 		losecount+=1
 	end
 
-	if(losecount == losemark and not showingmessage) state="fail"
+	if losecount == losemark and not showingmessage then
+		state="fail"
+	end
 end
 
 function _draw()
@@ -417,6 +420,7 @@ function glitch()
 
  memcpy(o1,o2,len)
 end
+
 __gfx__
 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffeeeeee
 eeeeeeffffeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffeeeeeeeeeeefff55feeeeeeeeeeeffffeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffeeeeeeeeeeeff55f5eeeee

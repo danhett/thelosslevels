@@ -15,10 +15,10 @@ end
 
 function setupgameparts()
 	nextgame = 'games/2-nws.p8'
-	line1 = "there are hundreds of messages..."
-	line2 = "a terrorist attack, here?"
-	success = "things slowly make sense.\n\nhe is missing."
-	failure = "nobody responding, but...\n\nhe is missing."
+	line1 = "hundreds of messages..."
+	line2 = "an explosion? an accident?"
+	success = "a bomb.\n\n...he is missing."
+	failure = "no idea, but...\n\nhe is missing."
 	col1 = 8
 	col2 = 9
 
@@ -41,6 +41,10 @@ function setupgameparts()
 	messagelimit = 100
 
 	xpos = 700
+
+	shaking = false
+	shakecount = 0
+	shakelimit = 10
 
 	playedendsound = false
 end
@@ -69,6 +73,8 @@ end
 
 function _update()
 	checkinputs()
+
+	shake()
 end
 
 function _draw()
@@ -180,6 +186,7 @@ function dotap()
 				state = "success"
 			else
 				state = "fail"
+				shaking = true
 			end
 		end
 	end
@@ -372,6 +379,18 @@ function glitch()
  len = flr(rnd(0x40))
 
  memcpy(o1,o2,len)
+end
+
+function shake(reset) -- shake the screen
+	camera(0,0) -- reset to 0,0 before each shake so we don't drift
+
+	if shaking then
+		if(shakecount < shakelimit) shakecount+=1
+		if(shakecount == shakelimit) shaking = false
+		if not reset then -- if the param is true, don't shake, just reset the screen to default
+			camera(flr(rnd(3)-3),flr(rnd(3)-3)) -- define shake power here (-5 to shake equally in all directions)
+		end
+	end
 end
 __gfx__
 66666666666666666666666666666666666666666666666666666666666666660000000000000000000000000000000000000000000000000000000000000000

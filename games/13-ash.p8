@@ -57,6 +57,10 @@ function setupgameparts()
 	poured = 0
 	pourmax = 200
 
+	shaking = false
+	shakecount = 0
+	shakelimit = 10
+
 	playedendsound = false
 end
 
@@ -104,7 +108,8 @@ function _update()
 
 	frame += 1
 
-	if frame == 800 and not state == "succes" then
+	if frame == 800 and not state == "success" then
+		shaking = true
 		state = "fail"
 	end
 
@@ -112,6 +117,8 @@ function _update()
 	if(frame%20 == 0) cloud2.x -= 1
 
  	particles_update(frame)
+
+	shake()
 end
 
 function particles_update(frame)
@@ -422,6 +429,18 @@ function glitch()
  len = flr(rnd(0x40))
 
  memcpy(o1,o2,len)
+end
+
+function shake(reset) -- shake the screen
+	camera(0,0) -- reset to 0,0 before each shake so we don't drift
+
+	if shaking then
+		if(shakecount < shakelimit) shakecount+=1
+		if(shakecount == shakelimit) shaking = false
+		if not reset then -- if the param is true, don't shake, just reset the screen to default
+			camera(flr(rnd(3)-3),flr(rnd(3)-3)) -- define shake power here (-5 to shake equally in all directions)
+		end
+	end
 end
 __gfx__
 000000000000000000000000000000000000000000000000000000ffff000000000000000000000000000000000000000000000000000000000000ffff000000

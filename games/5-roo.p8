@@ -17,8 +17,8 @@ function setupgameparts()
 	nextgame = 'games/6-hom.p8'
 	line1 = "led to a room. an officer waits."
 	line2 = "take a seat. this is inevitable."
-	success = "they found his body.\n\nhe was killed instantly."
-	failure = "they found his body.\n\nhe didn't make it."
+	success = "they found him.\n\nhe died in there."
+	failure = "they found him.\n\nhe didn't make it."
 	col1 = 13
 	col2 = 12
 
@@ -53,7 +53,13 @@ function setupgameparts()
 	flashstate = false
 
 	losecount = 0
-	losemark = 700
+	losemark = 500
+
+	shaking = false
+	shakecount = 0
+	shakelimit = 10
+
+	sfx(4)
 
 	playedendsound = false
 end
@@ -88,6 +94,8 @@ function _update()
 	end
 
 	checklossstate()
+
+	shake()
 end
 
 function _draw()
@@ -170,7 +178,10 @@ function checklossstate()
 		losecount+=1
 	end
 
-	if(losecount == losemark and not showingmessage) state="fail"
+	if losecount == losemark and not showingmessage then
+		state="fail"
+		shaking = true
+	end
 end
 
 function checkinputs()
@@ -260,21 +271,23 @@ end
 
 function handlewinloss()
 	if state == "success" then
-		outline(success,4,6,3,11)
+		outline(success,30,30,3,11)
 		showingmessage = true
 
 		if playedendsound == false then
-			sfx(2)
+			sfx(-1, 1)
+			--sfx(2)
 			playedendsound = true
 		end
 	end
 
 	if state == "fail" then
-		outline(failure,4,6,8,2)
+		outline(failure,20,20,8,2)
 		showingmessage = true
 
 		if playedendsound == false then
-			sfx(3)
+			sfx(-1, 1)
+			--sfx(3)
 			playedendsound = true
 		end
 	end
@@ -385,6 +398,18 @@ function glitch()
 
  memcpy(o1,o2,len)
 end
+
+function shake(reset) -- shake the screen
+	camera(0,0) -- reset to 0,0 before each shake so we don't drift
+
+	if shaking then
+		if(shakecount < shakelimit) shakecount+=1
+		if(shakecount == shakelimit) shaking = false
+		if not reset then -- if the param is true, don't shake, just reset the screen to default
+			camera(flr(rnd(3)-3),flr(rnd(3)-3)) -- define shake power here (-5 to shake equally in all directions)
+		end
+	end
+end
 __gfx__
 000000000000000000000000000000000000000000000000000000ffff000000000000000000000000000000000000000000000000000000000000ffff000000
 000000ffff0000000000000000000000000000ffff00000000000fff55f00000000000ffff0000000000000000000000000000ffff00000000000ff55f500000
@@ -459,4 +484,5 @@ __sfx__
 000300002c5502b5502a550295502855027550265502555024550235502255021550205501e5501d5501b5501a550195501855017550165501455012550105500c55008550055500255001550015500155001550
 000800020855006540015000f5000f500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500
 0005000004050080500b0500f0501205017050190501d0502205025050270502705027050230001d0001c0001c0001c0000000000000000000000000000000000000000000000000000000000000000000000000
-010500002805025050220501f0501a0501705013050100500e0500b0500a050080500805007050070500705007050070500705000000000000000000000000000000000000000000000000000000000000000000
+000500002805025050220501f0501a0501705013050100500e0500b0500a050080500805007050070500705007050070500705000000000000000000000000000000000000000000000000000000000000000000
+001800100110202102011020210202102001020010202102021020210202102021020010201152001020115200102001020010200102001020010200102001020010200102001020010200102001020010200102

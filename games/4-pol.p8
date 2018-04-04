@@ -58,6 +58,10 @@ function setupgameparts()
 	wincount = 0
 	wintarget = 600
 
+	shaking = false
+	shakecount = 0
+	shakelimit = 10
+
 	showingmessage = false
 
 	playedendsound = false
@@ -100,6 +104,8 @@ function _update()
 	end
 
 	checksuccess()
+
+	shake()
 end
 
 function _draw()
@@ -183,15 +189,24 @@ end
 function checkcollisions()
 	if state == "playing" then
 		if enemy1.x < 50 then
-			if(dst(car, enemy1) < 10 and dst(car, enemy1) > 1) state = "fail"
+			if dst(car, enemy1) < 10 and dst(car, enemy1) > 1 then
+				state = "fail"
+				shaking = true
+			end
 		end
 
 		if enemy2.x < 50 then
-			if(dst(car, enemy2) < 10 and dst(car, enemy2) > 1) state = "fail"
+			if dst(car, enemy2) < 10 and dst(car, enemy2) > 1 then
+				state = "fail"
+				shaking = true
+			end
 		end
 
 		if enemy3.x < 50 then
-			if(dst(car, enemy3) < 10 and dst(car, enemy3) > 1) state = "fail"
+			if dst(car, enemy3) < 10 and dst(car, enemy3) > 1 then
+				state = "fail"
+				shaking = true
+			end
 		end
 	end
 end
@@ -428,6 +443,18 @@ function glitch()
  len = flr(rnd(0x40))
 
  memcpy(o1,o2,len)
+end
+
+function shake(reset) -- shake the screen
+	camera(0,0) -- reset to 0,0 before each shake so we don't drift
+
+	if shaking then
+		if(shakecount < shakelimit) shakecount+=1
+		if(shakecount == shakelimit) shaking = false
+		if not reset then -- if the param is true, don't shake, just reset the screen to default
+			camera(flr(rnd(3)-3),flr(rnd(3)-3)) -- define shake power here (-5 to shake equally in all directions)
+		end
+	end
 end
 __gfx__
 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000

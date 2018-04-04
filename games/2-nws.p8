@@ -48,6 +48,10 @@ function setupgameparts()
 	randxpos = 0
 
 	playedendsound = false
+
+	shaking = false
+	shakecount = 0
+	shakelimit = 10
 end
 
 function setuptimeout()
@@ -76,6 +80,8 @@ function _update()
 	checkinputs()
 
 	adjusttaps()
+
+	shake()
 end
 
 function _draw()
@@ -193,7 +199,10 @@ function adjusttaps()
 		losecount+=1
 	end
 
-	if(losecount == losemark and not showingmessage) state="fail"
+	if losecount == losemark and not showingmessage then
+		state="fail"
+		shaking = true
+	end
 end
 
 function dotap()
@@ -401,6 +410,18 @@ function glitch()
  len = flr(rnd(0x40))
 
  memcpy(o1,o2,len)
+end
+
+function shake(reset) -- shake the screen
+	camera(0,0) -- reset to 0,0 before each shake so we don't drift
+
+	if shaking then
+		if(shakecount < shakelimit) shakecount+=1
+		if(shakecount == shakelimit) shaking = false
+		if not reset then -- if the param is true, don't shake, just reset the screen to default
+			camera(flr(rnd(3)-3),flr(rnd(3)-3)) -- define shake power here (-5 to shake equally in all directions)
+		end
+	end
 end
 __gfx__
 000000000000000000000000000000000000000000000000000000ffff000000000000000000000000000000000000000000000000000000000000ffff000000
