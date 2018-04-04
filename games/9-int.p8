@@ -153,7 +153,7 @@ function drawgame()
 	spr(68, aoffset, 50, 12, 4, true)
 	print("⬆️ ⬇️ ⬆️ ➡️ ⬅️ ⬇️ ⬆️", aoffset+8, 60, 6)
 
-	-- question 2 answers LOL oh my god really what
+	-- question 2 answers lol oh my god really what
 	if (step == 2) print("⬆️", aoffset+8, 60, 11)
 	if (step == 3) print("⬆️ ⬇️", aoffset+8, 60, 11)
 	if (step == 4) print("⬆️ ⬇️ ⬆️", aoffset+8, 60, 11)
@@ -206,23 +206,23 @@ end
 function checkinputs()
  	--⬆️ ⬇️ ⬆️ ➡️ ⬅️ ⬇️ ⬆️
 
-	if btnp(0) then -- LEFT
+	if btnp(0) then -- left
 		if(step == 5) next()
 
 	end
 
-	if btnp(1) then -- RIGHT
+	if btnp(1) then -- right
 		if(step == 4) next()
 
 	end
 
-	if btnp(2) then -- UP
+	if btnp(2) then -- up
 		if(step == 1) next()
 		if(step == 3) next()
 		if(step == 7) next()
 	end
 
-	if btnp(3) then -- DOWN
+	if btnp(3) then -- down
 		if(step == 2) next()
 		if(step == 6) next()
 
