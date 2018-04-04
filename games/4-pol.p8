@@ -23,6 +23,8 @@ function setupgameparts()
 	col1 = 3
 	col2 = 11
 
+	sfx(4)
+
 	flashcurrent = 0
 	flashrate = 10
 	flashstate = false
@@ -32,7 +34,7 @@ function setupgameparts()
 
 	car = {}
 	car.x = 10
-	car.y = 50
+	car.y = 30
 	car.xspeed = 1
 	car.yspeed = 2
 
@@ -179,16 +181,18 @@ function drawenemies()
 end
 
 function checkcollisions()
-	if enemy1.x < 50 then
-		if(dst(car, enemy1) < 10 and dst(car, enemy1) > 1) state = "fail"
-	end
+	if state == "playing" then
+		if enemy1.x < 50 then
+			if(dst(car, enemy1) < 10 and dst(car, enemy1) > 1) state = "fail"
+		end
 
-	if enemy2.x < 50 then
-		if(dst(car, enemy2) < 10 and dst(car, enemy2) > 1) state = "fail"
-	end
+		if enemy2.x < 50 then
+			if(dst(car, enemy2) < 10 and dst(car, enemy2) > 1) state = "fail"
+		end
 
-	if enemy3.x < 50 then
-		if(dst(car, enemy3) < 10 and dst(car, enemy3) > 1) state = "fail"
+		if enemy3.x < 50 then
+			if(dst(car, enemy3) < 10 and dst(car, enemy3) > 1) state = "fail"
+		end
 	end
 end
 
@@ -289,7 +293,11 @@ end
 function checksuccess()
 	if(wincount < wintarget) wincount+=1
 
-	if(wincount == wintarget) state = "success"
+	if(wincount == wintarget) then
+		if state == "playing" then
+			state = "success"
+		end
+	end
 end
 
 function handlewinloss()
@@ -298,6 +306,7 @@ function handlewinloss()
 		showingmessage = true
 
 		if playedendsound == false then
+			sfx(-1, 1)
 			sfx(2)
 			playedendsound = true
 		end
@@ -308,6 +317,7 @@ function handlewinloss()
 		showingmessage = true
 
 		if playedendsound == false then
+			sfx(-1, 1)
 			sfx(3)
 			playedendsound = true
 		end
@@ -462,4 +472,5 @@ __sfx__
 000300002c5502b5502a550295502855027550265502555024550235502255021550205501e5501d5501b5501a550195501855017550165501455012550105500c55008550055500255001550015500155001550
 000800020855006540015000f5000f500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500005000050000500
 0005000004050080500b0500f0501205017050190501d0502205025050270502705027050230001d0001c0001c0001c0000000000000000000000000000000000000000000000000000000000000000000000000
-010500002805025050220501f0501a0501705013050100500e0500b0500a050080500805007050070500705007050070500705000000000000000000000000000000000000000000000000000000000000000000
+000500002805025050220501f0501a0501705013050100500e0500b0500a050080500805007050070500705007050070500705000000000000000000000000000000000000000000000000000000000000000000
+000e000e211102111021110211102111021110211101e1101e1101e1101e1101e1101e1101e110261001f1001a100141000e1000b100091000710005100041000010000100001000010000100001000010000100
