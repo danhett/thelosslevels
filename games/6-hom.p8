@@ -16,7 +16,7 @@ end
 
 function setupgameparts()
 	debug = false
-	nextgame = 'games/8-flo.p8'
+	nextgame = 'games/7-flo.p8'
 	line1 = "home. numb."
 	line2 = "pour a drink."
 	success = "numb it for now.\n\nwill this help?"

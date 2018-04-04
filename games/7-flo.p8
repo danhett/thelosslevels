@@ -15,7 +15,7 @@ end
 
 function setupgameparts()
 	debug = true
-	nextgame = 'games/9-arn.p8'
+	nextgame = 'games/8-arn.p8'
 	line1 = "the next day. no sleep."
 	line2 = "word has spread. flowers arrive."
 	success = "the outpouring\n\nis overwhelming."

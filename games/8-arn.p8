@@ -15,7 +15,7 @@ end
 
 function setupgameparts()
 	debug = false
-	nextgame = 'games/10-bury.p8'
+	nextgame = 'games/9-int.p8'
 	line1 = "this is where it happened."
 	line2 = "roses mark the dead. find his."
 	success = "almost no distance at all.\n\nit was quick."

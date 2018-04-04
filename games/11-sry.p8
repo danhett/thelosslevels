@@ -159,7 +159,7 @@ function animateplayer()
 	end
 end
 
--- COPY PASTE LOL (NO TIME, OMG)
+-- copy paste lol (no time, omg)
 function animateenemies()
 	if state=="playing" then
 		-- one
