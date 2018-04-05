@@ -15,7 +15,7 @@ end
 
 function setupgameparts()
 	nextgame = 'games/4-pol.p8'
-	line1 = "a sudden knock at the door..."
+	line1 = "a knock at the door..."
 	line2 = "police? parents? go!"
 	success = "a note from a journo,\n\npushed under the door.\n\nvultures."
 	failure = "nobody there...\n\nwhoever it was, missed them."
@@ -63,7 +63,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -140,8 +140,6 @@ function animateplayer()
 	  if player.sprite > 7 then
 	   player.sprite = 0
 	  end
-
-		resettimeout()
 	end
 end
 
@@ -187,23 +185,30 @@ function checkinputs()
 		player.x-=player.speed
 		player.flip = true;
 		player.moving = true
+		resettimeout()
 	end
 
 	if btn(1) then
 		player.x+=player.speed
 		player.flip = false
 		player.moving = true
+		resettimeout()
 	end
 
 	if btn(2) then
 		player.y-=player.speed
 		player.moving = true
+		resettimeout()
 	end
 
 	if btn(3) then
 		player.y+=player.speed
 		player.moving = true
+		resettimeout()
 	end
+
+	if(btn(4)) resettimeout()
+	if(btn(5)) resettimeout()
 
 	if not player.moving then
     player.sprite = 0

@@ -53,7 +53,7 @@ function setupgameparts()
 	flashstate = false
 
 	losecount = 0
-	losemark = 500
+	losemark = 700
 
 	shaking = false
 	shakecount = 0
@@ -66,7 +66,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -144,8 +144,6 @@ function animateplayer()
 	  if player.sprite > 7 then
 	   player.sprite = 0
 	  end
-
-		resettimeout()
 	end
 end
 
@@ -188,26 +186,33 @@ function checkinputs()
 	player.moving = false
 
 	if btn(0) then
+		resettimeout()
 		player.x-=player.speed
 		player.flip = true;
 		player.moving = true
 	end
 
 	if btn(1) then
+		resettimeout()
 		player.x+=player.speed
 		player.flip = false
 		player.moving = true
 	end
 
 	if btn(2) then
+		resettimeout()
 		player.y-=player.speed
 		player.moving = true
 	end
 
 	if btn(3) then
+		resettimeout()
 		player.y+=player.speed
 		player.moving = true
 	end
+
+	if(btn(4)) resettimeout()
+	if(btn(5)) resettimeout()
 
 	if not player.moving then
     player.sprite = 0

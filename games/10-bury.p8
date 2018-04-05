@@ -87,7 +87,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -240,6 +240,11 @@ function outline(s,x,y,c1,c2)
 end
 
 function checkinputs()
+	if(btn(0)) resettimeout()
+	if(btn(1)) resettimeout()
+	if(btn(2)) resettimeout()
+	if(btn(3)) resettimeout()
+
 	if (btnp(4)) then
 		doplayerleft()
 		haspressed = true

@@ -18,7 +18,7 @@ function setupgameparts()
 	nextgame = 'games/3-jou.p8'
 	line1 = "it's all over the news."
 	line2 = "scour the feeds. find anything."
-	success = "this is huge.\n\npeople are dead and missing."
+	success = "people are missing.\n\n...people are dead."
 	failure = "this is huge...\n\ni need more info."
 	col1 = 12
 	col2 = 13
@@ -43,7 +43,7 @@ function setupgameparts()
 	tapsneeded = 50
 
 	losecount = 0
-	losemark = 600
+	losemark = 800
 
 	randxpos = 0
 
@@ -56,7 +56,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -118,7 +118,7 @@ function drawbase()
 		if b == 1 then dirup = true end;
 	end
 
-	rectfill_p(0,0,128,128,b,3,2)
+	rectfill_p(0,0,128,128,b,9,8)
 end
 
 function drawgame()
@@ -185,13 +185,20 @@ end
 function checkinputs()
 	if state == "playing" then
 		if (btnp(4)) then
+			resettimeout()
 			dotap()
 			sfx(4)
 		elseif (btnp(5)) then
+			resettimeout()
 			dotap()
 			sfx(5)
 		end
 	end
+
+	if(btn(0)) resettimeout()
+	if(btn(1)) resettimeout()
+	if(btn(2)) resettimeout()
+	if(btn(3)) resettimeout()
 end
 
 function adjusttaps()

@@ -68,7 +68,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -214,26 +214,30 @@ function checkinputs()
  	--⬆️ ⬇️ ⬆️ ➡️ ⬅️ ⬇️ ⬆️
 
 	if btnp(0) then -- left
+		resettimeout()
 		if(step == 5) next()
-
 	end
 
 	if btnp(1) then -- right
+		resettimeout()
 		if(step == 4) next()
-
 	end
 
 	if btnp(2) then -- up
+		resettimeout()
 		if(step == 1) next()
 		if(step == 3) next()
 		if(step == 7) next()
 	end
 
 	if btnp(3) then -- down
+		resettimeout()
 		if(step == 2) next()
 		if(step == 6) next()
-
 	end
+
+	if(btn(4)) resettimeout()
+	if(btn(5)) resettimeout()
 end
 
 function next()

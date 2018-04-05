@@ -8,7 +8,6 @@ function _init()
 	sfx(0)
 
 	setupgameparts()
-	setuptimeout()
 	setupglitches()
 	setupfader()
 end
@@ -27,11 +26,6 @@ function setupgameparts()
 	flashstate = false
 
 	frame = 0
-end
-
-function setuptimeout()
-	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -60,7 +54,6 @@ function _draw()
 	cls(0)
 	drawgame()
 	checkcollisions()
-	checktimeout()
 	handlefading()
 	flash()
 	glitch()
@@ -125,13 +118,6 @@ function resettimeout()
 	tcurrent = 0
 end
 
-function checktimeout()
-	if tcurrent < tmax then tcurrent+=1 end
-
-	if tcurrent == tmax then
-		load('losslevels.p8')
-	end
-end
 
 function handlefading()
 	if state == "waiting" then

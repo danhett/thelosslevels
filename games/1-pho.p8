@@ -17,8 +17,8 @@ function setupgameparts()
 	nextgame = 'games/2-nws.p8'
 	line1 = "hundreds of messages..."
 	line2 = "an explosion? an accident?"
-	success = "a bomb.\n\n...he is missing."
-	failure = "no idea, but...\n\nhe is missing."
+	success = "a bomb.\n\n...he's missing."
+	failure = "no idea, but...\n\nhe's missing."
 	col1 = 8
 	col2 = 9
 
@@ -51,7 +51,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()

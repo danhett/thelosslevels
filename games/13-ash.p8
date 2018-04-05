@@ -83,7 +83,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -208,23 +208,28 @@ end
 
 function checkinputs()
 	if btn(0) and jar.x > 0 then
+		resettimeout()
 		jar.x-=jar.speed
 	end
 
 	if btn(1) and jar.x < 100 then
+		resettimeout()
 		jar.x+=jar.speed
 	end
 
 	if btn(2) and jar.y > 39 then
+		resettimeout()
 		jar.y-=jar.speed
 	end
 
 	if btn(3) and jar.y < 50 then
+		resettimeout()
 		jar.y+=jar.speed
 		jar.moving = true
 	end
 
 	if btn(4) then
+		resettimeout()
 		pour()
 	else
 		stoppouring()

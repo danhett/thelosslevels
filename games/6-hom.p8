@@ -18,8 +18,8 @@ function setupgameparts()
 	debug = false
 	nextgame = 'games/7-flo.p8'
 	line1 = "home. numb."
-	line2 = "pour a drink."
-	success = "numb it for now.\n\nwill this help?"
+	line2 = "what now?"
+	success = "what else.\n\nwill this even help?"
 	failure = "fuck it.\n\nthis won't help."
 	col1 = 8
 	col2 = 9
@@ -78,7 +78,7 @@ end
 
 function setuptimeout()
 	tcurrent = 0
-	tmax = 60 * 60 -- reset timeout to return to the main menu
+	tmax = 60 * 10 -- reset timeout to return to the main menu
 end
 
 function setupfader()
@@ -105,7 +105,7 @@ function _update()
 
 	frame += 1
 
-	if frame == 500 then
+	if frame == 700 then
 		state = "fail"
 		shaking = true
 	end
@@ -236,10 +236,33 @@ function outline(s,x,y,c1,c2)
 end
 
 function checkinputs()
-	if (btn(0)) bottle.x-=bottle.speed
-	if (btn(1)) bottle.x+=bottle.speed
-	if (btn(2)) bottle.y-=bottle.speed
-	if (btn(3)) bottle.y+=bottle.speed
+	if btn(0) then
+		resettimeout()
+		bottle.x-=bottle.speed
+	end
+
+	if btn(1) then
+		resettimeout()
+		bottle.x+=bottle.speed
+	end
+
+	if btn(2) then
+		resettimeout()
+		bottle.y-=bottle.speed
+	end
+
+	if btn(3) then
+		resettimeout()
+		bottle.y+=bottle.speed
+	end
+
+	if btn(4) then
+		resettimeout()
+	end
+
+	if btn(5) then
+		resettimeout()
+	end
 end
 
 function resettimeout()
