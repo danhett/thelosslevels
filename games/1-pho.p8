@@ -119,10 +119,6 @@ end
 function drawgame()
 	if(xpos > 0) xpos-=4
 
-	--if not showingmessage then
-		--print("press!", 10 + rnd(2), 10, 7)
-	--end
-
 	-- phone
 	palt(0,false)
 	palt(6,true)
@@ -130,16 +126,22 @@ function drawgame()
 	rectfill_p(xpos+42,16,xpos+108,100,15,0,7)
 
 	-- dummy buttons
-	rectfill_p(xpos+44,20,xpos+106,34,3,0,col2)
-	rectfill_p(xpos+44,40,xpos+106,54,3,0,col2)
-	rectfill_p(xpos+44,80,xpos+106,94,3,0,col2)
+	rectfill_p(xpos+44,20,xpos+106,34,0,0,col2)
+	rectfill_p(xpos+44,40,xpos+106,54,0,0,col2)
+	rectfill_p(xpos+44,80,xpos+106,94,0,0,col2)
 
 	-- live button
 	if flashstate and not showingmessage then
-		rectfill_p(xpos+44,60,xpos+106,74,14,0,col2)
+		rectfill_p(xpos+44,60,xpos+106,74,16,0,col2)
 	else
-		rectfill_p(xpos+44,60,xpos+106,74,8,0,11)
+		rectfill_p(xpos+44,60,xpos+106,74,16,0,11)
 	end
+
+	-- text
+	print("??! !?!?? !!??!\n! ?!!? ?!!!...?", xpos + 46, 22, 7)
+	print("!! -? !??? !..!\n..??? !! ?!! ?!", xpos + 46, 42, 7)
+	print("???! ...!? ?!! \n?!?!! ?!! !??! ", xpos + 46, 62, 7) -- live
+	print("......??!! !!?!\n!??! !! ??! ?!?", xpos + 46, 82, 7)
 
 	-- hand
 	spr(hand.frame, hand.x, hand.y, 3, 4)

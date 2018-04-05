@@ -18,8 +18,8 @@ function setupgameparts()
 
 	nextgame = 'games/13-ash.p8'
 	line1 = "his home is empty. sold quickly."
-	line2 = "pack a life into boxes."
-	success = "everything in its place.\n\nthat place isn't here now."
+	line2 = "a life packed into boxes."
+	success = "boxes sealed, taken away.\n\nlock the door, and leave."
 	failure = "objects, not memories.\n\nleave it all here."
 	col1 = 8
 	col2 = 9

@@ -31,7 +31,7 @@ function setupgameparts()
 	player.x = 4
 	player.y = 106
 	player.step = 0
-	player.speed = 3
+	player.speed = 2
 	player.flip = false
 	player.sprite = 0
 	player.idlesprite = 32

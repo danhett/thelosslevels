@@ -18,7 +18,7 @@ function setupgameparts()
 	nextgame = 'games/3-jou.p8'
 	line1 = "it's all over the news."
 	line2 = "scour the feeds. find anything."
-	success = "people are missing.\n\n...people are dead."
+	success = "it says people are missing.\n\n...and injured, and dead."
 	failure = "this is huge...\n\ni need more info."
 	col1 = 12
 	col2 = 13
@@ -40,11 +40,12 @@ function setupgameparts()
 	messagelimit = 100
 
 	taps = 0
-	tapsneeded = 50
+	tapsneeded = 70
 
 	losecount = 0
 	losemark = 800
 
+	charpos = 0
 	randxpos = 0
 
 	playedendsound = false
@@ -52,6 +53,8 @@ function setupgameparts()
 	shaking = false
 	shakecount = 0
 	shakelimit = 10
+
+	doflip = true
 end
 
 function setuptimeout()
@@ -163,11 +166,14 @@ function drawgame()
 		spr(74, 74, 62, 2, 2)
 	end
 
+	if(charpos < randxpos) charpos+=6
+	if(charpos > randxpos) charpos-=6
+
 	-- character
 	if fastflashstate and not showingmessage then
-		sspr(128, 64, 16, 16, randxpos, 48, 50, 50)
+		sspr(128, 64, 16, 16, charpos, 48, 50, 50, doflip)
 	else
-		sspr(128, 80, 16, 16, randxpos, 48, 50, 50)
+		sspr(128, 80, 16, 16, charpos, 48, 50, 50, doflip)
 	end
 end
 
@@ -218,6 +224,12 @@ function dotap()
 
 		if taps % 3 == 0 and not showingmessage then
 			randxpos = rnd(80)
+		end
+
+		if randxpos < 30 then
+			doflip = true
+		else
+			doflip = false
 		end
 
 		if(taps == tapsneeded) state="success"

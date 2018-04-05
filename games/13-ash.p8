@@ -55,7 +55,7 @@ function setupgameparts()
 	messagelimit = 100
 
 	poured = 0
-	pourmax = 200
+	pourmax = 100
 
 	shaking = false
 	shakecount = 0
@@ -74,7 +74,7 @@ function particle_new(posx, posy, energy, angle, speed)
  return {
   x   		= posx,
   y   		= posy,
-  vel_x   = speed * cos(angle),
+  vel_x   = (speed * cos(angle))/2,
   vel_y   = -(speed/2) * sin(angle),
   nrg     = energy,
   dcy     = 1/energy,
@@ -231,6 +231,9 @@ function checkinputs()
 	if btn(4) then
 		resettimeout()
 		pour()
+	elseif btn(5) then
+		resettimeout()
+		pour()
 	else
 		stoppouring()
 	end
@@ -241,8 +244,8 @@ function pour()
 
 	poured+=1
 
-	if(poured > 100) jar.sprite = 131
-	if(poured > 150) jar.sprite = 134
+	if(poured > 25) jar.sprite = 131
+	if(poured > 75) jar.sprite = 134
 
 	if poured >= pourmax then
 		state = "success"

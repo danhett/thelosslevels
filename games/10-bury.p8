@@ -82,6 +82,11 @@ function setupgameparts()
 	shakecount = 0
 	shakelimit = 10
 
+	scroll1 = -96
+	scroll2 = -32
+	scroll3 = 32
+	scroll4 = 96
+
 	playedendsound = false
 end
 
@@ -177,6 +182,21 @@ end
 
 
 function drawgame()
+	rectfill(0,0,128,128,1)
+
+	-- scroll lines
+	rectfill(0,scroll1,128, scroll1+32, 0)
+	rectfill(0,scroll2,128, scroll2+32, 0)
+	rectfill(0,scroll3,128, scroll3+32, 0)
+	rectfill(0,scroll4,128, scroll4+32, 0)
+
+	if delay == 0 and state == "playing" then
+		scroll1 += 1
+		scroll2 += 1
+		scroll3 += 1
+		scroll4 += 1
+	end
+
 	-- pair1
 	spr(left, pair1.x, pair1.y - slideleft, 2,4)
 	spr(right, pair1.x + 10, pair1.y - slideright, 2,4)
